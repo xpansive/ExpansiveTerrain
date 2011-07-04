@@ -1,0 +1,11 @@
+name: ExpansiveTerrain
+main: com.xpansive.bukkit.worldgen.ExpansiveTerrain
+version: 0.1.0
+website: http://www.xpansive.x10.mx
+author: XPANSiVE
+description: ExpansiveTerrain world generator for bukkit
+load: startup
+commands:
+  expansive:
+    description: Sends you to the ExpansiveTerrain world.
+    usage: /expansive
