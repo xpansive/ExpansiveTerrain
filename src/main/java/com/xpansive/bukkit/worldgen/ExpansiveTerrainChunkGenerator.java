@@ -14,7 +14,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
 		if (v == null)
-			v = new Voronoi(8192, world.getSeed(),
+			v = new Voronoi(4096, world.getSeed(),
 					(int) Math.ceil(50f * (8192 / 512f)));
 
 		byte[] result = new byte[32768];
@@ -23,7 +23,10 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 				double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9,
 						.2f);
 
-				height = height * 32 + 32;
+				height = Math.max(height, -1);
+				height = Math.min(height, 1);
+
+				height = height * 48 + 64;
 				int dirtHeight = random.nextInt(3) + 2;
 				for (int y = (int) height; y >= 0; y--) {
 					int offset = getOffset(x, y, z);
