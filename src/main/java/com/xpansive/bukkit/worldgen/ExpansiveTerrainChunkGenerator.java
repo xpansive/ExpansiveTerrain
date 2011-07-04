@@ -13,38 +13,40 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	Voronoi v = null;
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
-			 if (v == null)
-			 v = new Voronoi(8192, world.getSeed(), (int)Math.ceil(50f*(8192/512f)));
+		if (v == null)
+			v = new Voronoi(8192, world.getSeed(),
+					(int) Math.ceil(50f * (8192 / 512f)));
 
-			byte[] result = new byte[32768];
-			for (int x = 0; x < 16; x++) {
-				for (int z = 0; z < 16; z++) {
-					double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9, .2f);
+		byte[] result = new byte[32768];
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9,
+						.2f);
 
-					height = height * 32 + 32;
-					int dirtHeight = random.nextInt(3) + 2;
-					for (int y = (int) height; y >= 0; y--) {
-						int offset = getOffset(x, y, z);
+				height = height * 32 + 32;
+				int dirtHeight = random.nextInt(3) + 2;
+				for (int y = (int) height; y >= 0; y--) {
+					int offset = getOffset(x, y, z);
 
-						// cover the bottom layer with bedrock
-						if (y == 0)
-							result[offset] = (byte) Material.BEDROCK.getId();
+					// cover the bottom layer with bedrock
+					if (y == 0)
+						result[offset] = (byte) Material.BEDROCK.getId();
 
-						else if (y < (int) height && y > height - dirtHeight)
-							result[offset] = (byte) Material.DIRT.getId();
+					else if (y < (int) height && y > height - dirtHeight)
+						result[offset] = (byte) Material.DIRT.getId();
 
-						// top layer gets grass
-						else if (y == (int) height)
-							result[offset] = (byte) Material.GRASS.getId();
+					// top layer gets grass
+					else if (y == (int) height)
+						result[offset] = (byte) Material.GRASS.getId();
 
-						else
-							result[offset] = (byte) Material.STONE.getId();
-					}
+					else
+						result[offset] = (byte) Material.STONE.getId();
 				}
 			}
+		}
 
-			return result;
-		
+		return result;
+
 	}
 
 	int getOffset(int x, int y, int z) {

@@ -1,4 +1,3 @@
-
 package com.xpansive.bukkit.worldgen;
 
 import java.util.Random;
@@ -11,18 +10,18 @@ import org.bukkit.Location;
 
 public class TreePopulator extends BlockPopulator {
 
-    public void populate(World world, Random random, Chunk source) {
-        if(random.nextInt(100) >= 50) {
-        	int x = (source.getX() << 4) + random.nextInt(16);
-        	int z = (source.getZ() << 4) + random.nextInt(16);
-        	int y = world.getHighestBlockYAt(x, z);
-        	
-        	world.generateTree(new Location(world, x, y, z), TreeType.BIG_TREE);
-        	
-        }
-    }
-    
-    void setBlock(World w, int x, int y, int z, Material m) {
-    	w.getBlockAt(x, y, z).setType(m);
-    }
+	public void populate(World world, Random random, Chunk source) {
+		if (random.nextInt(100) >= 50) {
+			int x = (source.getX() << 4) + random.nextInt(16);
+			int z = (source.getZ() << 4) + random.nextInt(16);
+			int y = world.getHighestBlockYAt(x, z);
+
+			world.generateTree(new Location(world, x, y, z), TreeType.BIG_TREE);
+
+		}
+	}
+
+	void setBlock(World w, int x, int y, int z, Material m) {
+		w.getBlockAt(x, y, z).setType(m);
+	}
 }
