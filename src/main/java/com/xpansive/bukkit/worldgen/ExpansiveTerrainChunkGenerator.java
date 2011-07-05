@@ -11,17 +11,19 @@ import org.bukkit.World;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	Voronoi v = null;
+	//Perlin p = null;
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
-		if (v == null)
+		if (v == null /*|| p == null*/) {
 			v = new Voronoi(4096, world.getSeed(),
 					(int) Math.ceil(50f * (8192 / 512f)));
+			//p = new Perlin();
+		}
 
 		byte[] result = new byte[32768];
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9,
-						.2f);
+				double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9,.2f);
 
 				height = Math.max(height, -1);
 				height = Math.min(height, 1);
@@ -44,6 +46,12 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 					else
 						result[offset] = (byte) Material.STONE.getId();
+
+					//double perlin = p.Perlin_Noise(x, y, 500, 4, 2f, .7f);
+
+					//double pixel = v.get((int)(x + perlin * 15), (int)(y + perlin * 15), 4, .2f);
+					//int pix = (int) (pixel * 128 + 128);
+					//if (!(pix < 160 && pix > 130)) result[offset] = 0;
 				}
 			}
 		}
