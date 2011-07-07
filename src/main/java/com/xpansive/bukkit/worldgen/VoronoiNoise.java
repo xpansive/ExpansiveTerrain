@@ -1,16 +1,16 @@
 package com.xpansive.bukkit.worldgen;
 
 
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
-import org.bukkit.util.Vector;
 
 class VoronoiNoise {
-	private ArrayList<Vector> voronoiPoints = new ArrayList<Vector>();
+	private ArrayList<Point> voronoiPoints = new ArrayList<Point>();
 	private Random random;
 	private HashMap<Point, Boolean> generatedChunks = new HashMap<Point, Boolean>();
 
@@ -41,12 +41,12 @@ class VoronoiNoise {
 		generatedChunks.put(p, true);
 
 		for (int index = 0; index < numPoints; index++) {
-			voronoiPoints.add(new Vector(random(xOff, xOff + width), random(yOff, yOff + height), random(0, height)));
+			voronoiPoints.add(new Point(random(xOff, xOff + width), random(yOff, yOff + height)));
 		}
 		// Collections.sort(voronoiPoints);
 	}
 
-	private Stack<Vector> closestPoints = new Stack<Vector>();
+	private Stack<Point> closestPoints = new Stack<Point>();
 	private boolean forceAllPoints;
 	private boolean justCalculated;
 	private int lastLowestDistance;
@@ -54,17 +54,17 @@ class VoronoiNoise {
 	private int numCalcAll, numCalcClosest;
 	
 	private int random(int min, int max) {
-		return min + (int)(random.nextDouble() * ((max - min) + 1));
+		return min + (int)(Math.random() * ((max - min) + 1));
 	}
 
 	public int Voronoi(int x, int y) {
 		int lowestDistance = Integer.MAX_VALUE;
-		if ((lastLowestDistance < 15 && !justCalculated) || y < 3 || forceAllPoints) {
+		if ((!justCalculated) || forceAllPoints) {
 			numCalcAll++;
 			forceAllPoints = false;
 			closestPoints.clear();
 
-			for (Vector point : voronoiPoints) {
+			for (Point point : voronoiPoints) {
 				int temp = Distance(new Point(x, y), point);
 
 				if (temp > lowestDistance)
@@ -80,7 +80,7 @@ class VoronoiNoise {
 		}
 		numCalcClosest++;
 
-		for (Vector point : closestPoints) {
+		for (Point point : closestPoints) {
 			int temp = Distance(new Point(x, y), point);
 
 			if (temp > lowestDistance)
@@ -93,8 +93,8 @@ class VoronoiNoise {
 		return lowestDistance;
 	}
 
-	private static int Distance(Point p1, Vector p2) {
-		int x = (int) (p2.getX() - p1.x), y = (int) (p2.getY() - p1.y);
+	private static int Distance(Point p1, Point p2) {
+		int x = (int) (p2.x - p1.x), y = (int) (p2.y - p1.y);
 		// return (int)Math.Sqrt(x * x + y * y); //Length
 		return x * x + y * y; // Length2
 		// return (int)(Math.Abs(x) + Math.Abs(y)); //Manhattan

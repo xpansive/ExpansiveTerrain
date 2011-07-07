@@ -8,6 +8,7 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.util.noise.*;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	VoronoiNoise v;
@@ -29,28 +30,22 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 				height = Math.min(height, 127);
 				// height = height * 48 + 64;
 				int dirtHeight = random.nextInt(3) + 2;
-				for (int y = 128; y >= 0; y--) {
+				for (int y = 0; y <= height; y++) {
 					int offset = getOffset(x, y, z);
 
 					// cover the bottom layer with bedrock
 					if (y == 0)
 						result[offset] = (byte) Material.BEDROCK.getId();
 
-					//else if (y < 36)
-					//	result[offset] = (byte) Material.WATER.getId();
+					// top layer gets grass
+					if (y == (int) height)
+						result[offset] = (byte) Material.GRASS.getId();
 
-					if (y <= (int) height) {
-						
-						// top layer gets grass
-						if (y == (int) height)
-							result[offset] = (byte) Material.GRASS.getId();
-						
-						else if (y > height - dirtHeight)
-							result[offset] = (byte) Material.DIRT.getId();
+					else if (y > height - dirtHeight)
+						result[offset] = (byte) Material.DIRT.getId();
 
-						else
-							result[offset] = (byte) Material.STONE.getId();
-					}
+					else
+						result[offset] = (byte) Material.STONE.getId();
 
 					// double perlin = p.Perlin_Noise(x, y, 500, 4, 2f, .7f);
 
@@ -80,8 +75,8 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public Location getFixedSpawnLocation(World world, Random random) {
-		int x = random.nextInt(250);
-		int z = random.nextInt(250);
+		int x = random.nextInt(500) - 250;
+		int z = random.nextInt(250) - 250;
 		int y = world.getHighestBlockYAt(x, z);
 		return new Location(world, x, y, z);
 	}
