@@ -59,7 +59,7 @@ class VoronoiNoise {
 
 	public int Voronoi(int x, int y) {
 		int lowestDistance = Integer.MAX_VALUE;
-		if ((!justCalculated) || forceAllPoints) {
+		if (true || forceAllPoints) {//(lastLowestDistance < 20 &&!justCalculated) || y <= 2 ||
 			numCalcAll++;
 			forceAllPoints = false;
 			closestPoints.clear();

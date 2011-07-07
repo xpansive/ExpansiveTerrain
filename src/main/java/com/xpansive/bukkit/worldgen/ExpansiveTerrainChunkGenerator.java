@@ -19,16 +19,14 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 		if (v == null)
 			v = new VoronoiNoise(random);
 
-		v.GenChunks(cx * 16, cz * 16, 128, 128, 48);
+		v.GenChunks(cx * 16, cz * 16, 16, 16, random.nextInt(3));
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) * 127 / 2000;
+				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) * 127 / 1000;
 
-				// height = 127 - height;
 				height += 32;
 				height = Math.min(height, 127);
-				// height = height * 48 + 64;
 				int dirtHeight = random.nextInt(3) + 2;
 				for (int y = 0; y <= height; y++) {
 					int offset = getOffset(x, y, z);
@@ -46,13 +44,6 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 					else
 						result[offset] = (byte) Material.STONE.getId();
-
-					// double perlin = p.Perlin_Noise(x, y, 500, 4, 2f, .7f);
-
-					// double pixel = v.get((int)(x + perlin * 15), (int)(y +
-					// perlin * 15), 4, .2f);
-					// int pix = (int) (pixel * 128 + 128);
-					// if (!(pix < 160 && pix > 130)) result[offset] = 0;
 				}
 			}
 		}
