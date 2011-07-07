@@ -11,11 +11,11 @@ import org.bukkit.Location;
 public class TreePopulator extends BlockPopulator {
 
 	public void populate(World world, Random random, Chunk source) {
-		if (random.nextInt(100) >= 50) {
-			int x = (source.getX() << 4) + random.nextInt(16);
-			int z = (source.getZ() << 4) + random.nextInt(16);
-			int y = world.getHighestBlockYAt(x, z);
-
+		int x = (source.getX() << 4) + random.nextInt(16);
+		int z = (source.getZ() << 4) + random.nextInt(16);
+		int y = world.getHighestBlockYAt(x, z);
+		
+		if (random.nextInt(128) <= y) {
 			world.generateTree(new Location(world, x, y, z), TreeType.BIG_TREE);
 
 		}

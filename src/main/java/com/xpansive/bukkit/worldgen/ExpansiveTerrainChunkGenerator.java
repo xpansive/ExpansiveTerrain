@@ -10,48 +10,54 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
-	Voronoi v = null;
-	//Perlin p = null;
+	VoronoiNoise v;
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
-		if (v == null /*|| p == null*/) {
-			v = new Voronoi(4096, world.getSeed(),
-					(int) Math.ceil(50f * (8192 / 512f)));
-			//p = new Perlin();
-		}
-
 		byte[] result = new byte[32768];
+
+		if (v == null)
+			v = new VoronoiNoise(random);
+
+		v.GenChunks(cx * 16, cz * 16, 128, 128, 48);
+
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				double height = v.get((cx * 16 + x) * 8, (cz * 16 + z) * 8, 9,.2f);
+				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) * 127 / 2000;
 
-				height = Math.max(height, -1);
-				height = Math.min(height, 1);
-
-				height = height * 48 + 64;
+				// height = 127 - height;
+				height += 32;
+				height = Math.min(height, 127);
+				// height = height * 48 + 64;
 				int dirtHeight = random.nextInt(3) + 2;
-				for (int y = (int) height; y >= 0; y--) {
+				for (int y = 128; y >= 0; y--) {
 					int offset = getOffset(x, y, z);
 
 					// cover the bottom layer with bedrock
 					if (y == 0)
 						result[offset] = (byte) Material.BEDROCK.getId();
 
-					else if (y < (int) height && y > height - dirtHeight)
-						result[offset] = (byte) Material.DIRT.getId();
+					//else if (y < 36)
+					//	result[offset] = (byte) Material.WATER.getId();
 
-					// top layer gets grass
-					else if (y == (int) height)
-						result[offset] = (byte) Material.GRASS.getId();
+					if (y <= (int) height) {
+						
+						// top layer gets grass
+						if (y == (int) height)
+							result[offset] = (byte) Material.GRASS.getId();
+						
+						else if (y > height - dirtHeight)
+							result[offset] = (byte) Material.DIRT.getId();
 
-					else
-						result[offset] = (byte) Material.STONE.getId();
+						else
+							result[offset] = (byte) Material.STONE.getId();
+					}
 
-					//double perlin = p.Perlin_Noise(x, y, 500, 4, 2f, .7f);
+					// double perlin = p.Perlin_Noise(x, y, 500, 4, 2f, .7f);
 
-					//double pixel = v.get((int)(x + perlin * 15), (int)(y + perlin * 15), 4, .2f);
-					//int pix = (int) (pixel * 128 + 128);
-					//if (!(pix < 160 && pix > 130)) result[offset] = 0;
+					// double pixel = v.get((int)(x + perlin * 15), (int)(y +
+					// perlin * 15), 4, .2f);
+					// int pix = (int) (pixel * 128 + 128);
+					// if (!(pix < 160 && pix > 130)) result[offset] = 0;
 				}
 			}
 		}
