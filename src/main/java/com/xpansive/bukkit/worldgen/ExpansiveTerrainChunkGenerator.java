@@ -19,11 +19,12 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 		if (v == null)
 			v = new VoronoiNoise(random);
 
-		v.GenChunks(cx * 16, cz * 16, 16, 16, random.nextInt(3));
+		
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) * 127 / 1000;
+				v.GenChunks(cx * 16 + x, cz * 16 + z, 16, 16, random.nextInt(2));
+				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) / 30;
 
 				height += 32;
 				height = Math.min(height, 127);
