@@ -35,6 +35,8 @@ public class ExpansiveTerrain extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.WORLD_LOAD, listener, Priority.Normal,
 				this);
+		pm.registerEvent(Event.Type.WORLD_SAVE, listener, Priority.Normal,
+				this);
 		
 		loadConfiguration();
 		initializeDatabase();
