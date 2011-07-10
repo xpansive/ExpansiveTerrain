@@ -8,23 +8,20 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.util.noise.*;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
-	VoronoiNoise v;
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
-		byte[] result = new byte[32768];
-
-		if (v == null)
-			v = new VoronoiNoise(random);
-
 		
+		byte[] result = new byte[32768];
+		
+		if (VoronoiNoise.random == null)
+			VoronoiNoise.random = random;
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				v.GenChunks(cx * 16 + x, cz * 16 + z, 16, 16, random.nextInt(2));
-				int height = v.Voronoi(cx * 16 + x, cz * 16 + z) / 30;
+				VoronoiNoise.GenChunks(cx * 16 + x, cz * 16 + z, 16, 16, random.nextInt(2));
+				int height = VoronoiNoise.Voronoi(cx * 16 + x, cz * 16 + z) / 20;
 
 				height += 32;
 				height = Math.min(height, 127);
@@ -67,7 +64,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 	@Override
 	public Location getFixedSpawnLocation(World world, Random random) {
-		int x = random.nextInt(500) - 250;
+		int x = random.nextInt(250) - 250;
 		int z = random.nextInt(250) - 250;
 		int y = world.getHighestBlockYAt(x, z);
 		return new Location(world, x, y, z);

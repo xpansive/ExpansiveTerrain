@@ -15,7 +15,7 @@ public class TreePopulator extends BlockPopulator {
 		int z = (source.getZ() << 4) + random.nextInt(16);
 		int y = world.getHighestBlockYAt(x, z);
 		
-		if (random.nextInt(128) - y / 2 <= 50) { //less chance of trees higher up
+		if (random.nextInt(128) - y <= 64) { //less chance of trees higher up
 			world.generateTree(new Location(world, x, y, z), TreeType.BIG_TREE);
 
 		}
