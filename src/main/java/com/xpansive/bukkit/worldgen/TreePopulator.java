@@ -21,7 +21,7 @@ public class TreePopulator extends BlockPopulator {
 		}
 	}
 
-	void setBlock(World w, int x, int y, int z, Material m) {
+	private void setBlock(World w, int x, int y, int z, Material m) {
 		w.getBlockAt(x, y, z).setType(m);
 	}
 }
