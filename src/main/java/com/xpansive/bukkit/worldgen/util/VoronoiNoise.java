@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-class VoronoiNoise {
+public class VoronoiNoise {
 	private ArrayList<Point3D> voronoiPoints;
 	private Random random;
 	private ArrayList<Point> generatedChunks;
