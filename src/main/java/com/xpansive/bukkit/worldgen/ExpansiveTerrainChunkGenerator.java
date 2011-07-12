@@ -8,24 +8,27 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.Material;
 import org.bukkit.World;
-
+import org.bukkit.util.noise.*;
 import com.xpansive.bukkit.worldgen.util.VoronoiNoise;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	VoronoiNoise v;
-	
+	int lastRandom;
+
 	public byte[] generate(World world, Random random, int cx, int cz) {
-		
+
 		if (v == null)
 			v = new VoronoiNoise(random);
-		
+
 		byte[] result = new byte[32768];
-		v.genChunks(cx * 16, cz * 16, 16, 16, random.nextInt(2));
+		v.genChunks(cx * 16, cz * 16, 16, 16, 2);
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				
 				int height = v.get(cx * 16 + x, cz * 16 + z) / 20;
+				height += SimplexNoiseGenerator.getNoise(
+						((double) (cx * 16 + x)) / 50,
+						((double) (cz * 16 + z)) / 50) * 10;
 
 				height += 32;
 				height = Math.min(height, 127);

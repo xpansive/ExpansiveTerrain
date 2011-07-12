@@ -1,43 +1,77 @@
 package com.xpansive.bukkit.worldgen.util;
 
 import java.awt.Point;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
+
+import com.xpansive.bukkit.worldgen.ExpansiveTerrain;
 
 public class VoronoiNoise {
 	private ArrayList<Point3D> voronoiPoints;
 	private Random random;
 	private ArrayList<Point> generatedChunks;
-	
-	public VoronoiNoise(Random random)
-	{
+	private final int calcOffset = 3;
+
+	public VoronoiNoise(Random random) {
 		this.random = random;
+		load();
 	}
 
 	private void save() {
-	}
-
-	private void load() {
-	}
-
-	public void genChunks(int x, int y, int width, int height,
-			int numPoints) {
-		
-		if (generatedChunks == null || voronoiPoints == null)
-			load();
-		
-		int offset = 1;
-		for (int cx = x / width - offset; cx < x / width + offset; cx++)
-			for (int cy = y / height - offset; cy < y / height + offset; cy++) {
-				genVoronoi(width, height, numPoints, cx, cy);
+		try {
+			OutputStream file = new FileOutputStream(ExpansiveTerrain.WORLD_NAME + "/points.ser");
+			OutputStream buffer = new BufferedOutputStream(file);
+			ObjectOutput output = new ObjectOutputStream(buffer);
+			try {
+				output.writeObject(voronoiPoints);
+			} finally {
+				output.close();
 			}
+		} catch (IOException ex) {
+			System.out.println("Cannot save ExpansiveTerrain data!");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void load() {
+		generatedChunks = new ArrayList<Point>();
+		voronoiPoints = new ArrayList<Point3D>();
+
+		try {
+			InputStream file = new FileInputStream(ExpansiveTerrain.WORLD_NAME + "/points.ser");
+			InputStream buffer = new BufferedInputStream(file);
+			ObjectInput input = new ObjectInputStream(buffer);
+			try {
+				Object readObject = input.readObject();
+				if (readObject instanceof ArrayList<?>)
+					voronoiPoints = (ArrayList<Point3D>) readObject;
+				else
+					System.out
+							.println("ExpansiveTerrain's data file is corrupted or contains the wrong data!");
+			} finally {
+				input.close();
+			}
+		}
+
+		catch (Exception ex) {
+			System.out.println("Cannot load ExpansiveTerrain data!");
+		}
+	}
+
+	public void genChunks(int x, int y, int width, int height, int numPoints) {
 		
+		for (int cx = x / width - calcOffset; cx < x / width + calcOffset; cx++)
+			for (int cy = y / height - calcOffset; cy < y / height + calcOffset; cy++) {
+				genVoronoi(width, height, random.nextInt(numPoints), cx, cy);
+			}
+
 		save();
 	}
 
-	private void genVoronoi(int width, int height, int numPoints,
-			int xOff, int yOff) {
+	private void genVoronoi(int width, int height, int numPoints, int xOff,
+			int yOff) {
 		Point p = new Point(xOff, yOff);
 		if (generatedChunks.contains(p)) // already generated
 			return;
