@@ -14,6 +14,7 @@ import com.xpansive.bukkit.worldgen.util.VoronoiNoise;
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	VoronoiNoise v;
 	int lastRandom;
+	
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
 
@@ -26,14 +27,16 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int height = v.get(cx * 16 + x, cz * 16 + z) / 20;
-				height += SimplexNoiseGenerator.getNoise(
+				height *= Math.min(PerlinNoiseGenerator.getNoise(
 						((double) (cx * 16 + x)) / 50,
-						((double) (cz * 16 + z)) / 50) * 10;
+						((double) (cz * 16 + z)) / 50, 3, 2, .7) + 1, 1);
 
 				height += 32;
+				
 				height = Math.min(height, 127);
 				int dirtHeight = random.nextInt(3) + 2;
 				for (int y = 0; y <= height; y++) {
+					
 					int offset = getOffset(x, y, z);
 
 					// cover the bottom layer with bedrock
@@ -41,7 +44,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 						result[offset] = (byte) Material.BEDROCK.getId();
 
 					// top layer gets grass
-					if (y == (int) height)
+					else if (y == (int) height)
 						result[offset] = (byte) Material.GRASS.getId();
 
 					else if (y > height - dirtHeight)

@@ -25,7 +25,11 @@ public class VoronoiNoise {
 			OutputStream buffer = new BufferedOutputStream(file);
 			ObjectOutput output = new ObjectOutputStream(buffer);
 			try {
-				output.writeObject(voronoiPoints);
+				Stack<Object> s = new Stack<Object>();
+				s.push(voronoiPoints);
+				s.push(generatedChunks);
+				
+				output.writeObject(s);
 			} finally {
 				output.close();
 			}
@@ -45,8 +49,12 @@ public class VoronoiNoise {
 			ObjectInput input = new ObjectInputStream(buffer);
 			try {
 				Object readObject = input.readObject();
-				if (readObject instanceof ArrayList<?>)
-					voronoiPoints = (ArrayList<Point3D>) readObject;
+				if (readObject instanceof Stack<?>) {
+					Stack<Object> s = (Stack<Object>) readObject;
+					
+					generatedChunks = (ArrayList<Point>)s.pop();
+					voronoiPoints = (ArrayList<Point3D>)s.pop();
+				}
 				else
 					System.out
 							.println("ExpansiveTerrain's data file is corrupted or contains the wrong data!");
