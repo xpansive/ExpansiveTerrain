@@ -70,7 +70,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator());
+		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator(), new FlowerPopulator());
 	}
 
 	@Override

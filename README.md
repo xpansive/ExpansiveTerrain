@@ -13,10 +13,12 @@ The jar will be in the target folder (if it builds sucessfully).
 -A voronoi noise based heightmap terrain, which produces large mountians with jagged peaks   
 -Ores   
 -Trees   
+-Flowers   
 
 ###Todo List
 In order of importance:   
--Surface decorations (flowers, pumpkins)   
+-Pumpkins   
+-Mushrooms   
 -Biome support   
 -Caves   
 -Lakes   
