@@ -2,7 +2,6 @@ package com.xpansive.bukkit.expansiveterrain.populators;
 
 import java.util.Random;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
