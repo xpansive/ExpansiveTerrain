@@ -22,17 +22,18 @@ public class ExpansiveTerrain extends JavaPlugin {
 				+ " is enabled!");
 
 		getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec());
-		
-		genWorld = Bukkit.getServer().createWorld(WORLD_NAME,
-				World.Environment.NORMAL,
-				new ExpansiveTerrainChunkGenerator());
 	}
-	
+
 	public boolean anonymousCheck(CommandSender sender) {
 		return sender instanceof Player;
 	}
 
 	public static World getExpansiveTerrainWorld() {
+		if (genWorld == null) {
+			genWorld = Bukkit.getServer().createWorld(WORLD_NAME,
+					World.Environment.NORMAL,
+					new ExpansiveTerrainChunkGenerator());
+		}
 		return genWorld;
 	}
 

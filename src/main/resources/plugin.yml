@@ -1,5 +1,5 @@
 name: ExpansiveTerrain
-main: com.xpansive.bukkit.worldgen.ExpansiveTerrain
+main: com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain
 version: 0.1.0
 website: http://www.xpansive.x10.mx
 author: XPANSiVE
