@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.worldgen.util;
+package com.xpansive.bukkit.expansiveterrain.util;
 
 import java.awt.Point;
 import java.io.*;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-import com.xpansive.bukkit.worldgen.ExpansiveTerrain;
+import com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain;
 
 public class VoronoiNoise {
 	private ArrayList<Point3D> voronoiPoints;

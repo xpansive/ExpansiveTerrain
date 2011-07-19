@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.worldgen.util;
+package com.xpansive.bukkit.expansiveterrain.util;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.worldgen;
+package com.xpansive.bukkit.expansiveterrain;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,8 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.*;
-import com.xpansive.bukkit.worldgen.util.VoronoiNoise;
+import com.xpansive.bukkit.expansiveterrain.util.VoronoiNoise;
+import com.xpansive.bukkit.expansiveterrain.populators.*;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	VoronoiNoise v;
@@ -69,7 +70,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator());
+		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator());
 	}
 
 	@Override

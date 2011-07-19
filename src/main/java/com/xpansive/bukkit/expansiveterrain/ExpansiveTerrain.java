@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.worldgen;
+package com.xpansive.bukkit.expansiveterrain;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -22,6 +22,10 @@ public class ExpansiveTerrain extends JavaPlugin {
 				+ " is enabled!");
 
 		getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec());
+		
+		genWorld = Bukkit.getServer().createWorld(WORLD_NAME,
+				World.Environment.NORMAL,
+				new ExpansiveTerrainChunkGenerator());
 	}
 	
 	public boolean anonymousCheck(CommandSender sender) {
@@ -29,12 +33,6 @@ public class ExpansiveTerrain extends JavaPlugin {
 	}
 
 	public static World getExpansiveTerrainWorld() {
-		if (genWorld == null) {
-			genWorld = Bukkit.getServer().createWorld(WORLD_NAME,
-					World.Environment.NORMAL,
-					new ExpansiveTerrainChunkGenerator());
-		}
-
 		return genWorld;
 	}
 
