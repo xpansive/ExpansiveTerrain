@@ -10,12 +10,14 @@ The jar will be in the target folder (if it builds sucessfully).
 `/expansive` - Brings you to the ExpansiveTerrain world
 
 ###Features
-A voronoi noise based heightmap terrain, which produces large mountians with jagged peaks.
+-A voronoi noise based heightmap terrain, which produces large mountians with jagged peaks   
+-Ores   
+-Trees   
 
 ###Todo List
 In order of importance:   
--Ores   
 -Surface decorations (flowers, pumpkins)   
 -Biome support   
 -Caves   
 -Lakes   
+-More tree types   
