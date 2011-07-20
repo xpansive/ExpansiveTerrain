@@ -19,22 +19,8 @@ public class FlowerPopulator extends BlockPopulator {
 					: Material.YELLOW_FLOWER;
 
 			for (int i = 0; i < NUM_STEPS; i++) {
-				int dir = random.nextInt(4);
-
-				switch (dir) {
-				case 0: // right
-					x++;
-					break;
-				case 1: // left
-					x--;
-					break;
-				case 2: // up
-					z++;
-					break;
-				case 3: // down
-					z--;
-					break;
-				}
+				x += random.nextInt(3) - 1;
+				z += random.nextInt(3) - 1;
 				int y = world.getHighestBlockYAt(x, z);
 				if (world.getBlockAt(x, y - 1, z).getType() == Material.GRASS
 						&& random.nextInt(100) > 5) { //5% chance of blank spot 
