@@ -15,7 +15,6 @@ import com.xpansive.bukkit.expansiveterrain.populators.*;
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	VoronoiNoise v;
 	int lastRandom;
-	
 
 	public byte[] generate(World world, Random random, int cx, int cz) {
 
@@ -33,11 +32,12 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 						((double) (cz * 16 + z)) / 50, 3, 2, .7) + 1, 1);
 
 				height += 32;
-				
+
 				height = Math.min(height, 127);
 				int dirtHeight = random.nextInt(3) + 2;
+				int snowHeight = random.nextInt(4);
 				for (int y = 0; y <= height; y++) {
-					
+
 					int offset = getOffset(x, y, z);
 
 					// cover the bottom layer with bedrock
@@ -53,6 +53,11 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 					else
 						result[offset] = (byte) Material.STONE.getId();
+
+					if (y > 80 - snowHeight) {
+						result[getOffset(x, y + 1, z)] = (byte) Material.SNOW
+								.getId();
+					}
 				}
 			}
 		}
@@ -70,7 +75,9 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator(), new FlowerPopulator(), new PumpkinPopulator());
+		return Arrays.asList((BlockPopulator) new TreePopulator(),
+				new OrePopulator(), new FlowerPopulator(),
+				new PumpkinPopulator(), new MushroomPopulator());
 	}
 
 	@Override
