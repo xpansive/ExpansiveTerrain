@@ -15,11 +15,15 @@ The jar will be in the target folder (if it builds sucessfully).
 -Trees   
 -Flowers   
 -Pumpkins   
+-Mushrooms   
 
 ###Todo List
 In order of importance:    
--Mushrooms   
+-Wild grass/shrubs   
 -Biome support   
+-Cacti   
 -Caves   
 -Lakes   
+-Reeds   
 -More tree types   
+-Dungeons/ruins?   
