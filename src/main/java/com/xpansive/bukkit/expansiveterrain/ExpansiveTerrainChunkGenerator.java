@@ -27,8 +27,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
 				int height = v.get(cx * 16 + x, cz * 16 + z) / 20;
-				height *= Math.min(PerlinNoiseGenerator.getNoise(
-						((double) (cx * 16 + x)) / 50,
+				height *= Math.min(PerlinNoiseGenerator.getNoise(((double) (cx * 16 + x)) / 50,
 						((double) (cz * 16 + z)) / 50, 3, 2, .7) + 1, 1);
 
 				height += 32;
@@ -55,8 +54,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 						result[offset] = (byte) Material.STONE.getId();
 
 					if (y > 80 - snowHeight) {
-						result[getOffset(x, y + 1, z)] = (byte) Material.SNOW
-								.getId();
+						result[getOffset(x, y + 1, z)] = (byte) Material.SNOW.getId();
 					}
 				}
 			}
@@ -75,9 +73,8 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator(),
-				new OrePopulator(), new FlowerPopulator(),
-				new PumpkinPopulator(), new MushroomPopulator());
+		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator(), new FlowerPopulator(),
+				new PumpkinPopulator(), new MushroomPopulator(), new WildGrassPopulator());
 	}
 
 	@Override

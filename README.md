@@ -16,10 +16,10 @@ The jar will be in the target folder (if it builds sucessfully).
 -Flowers   
 -Pumpkins   
 -Mushrooms   
+-Wild grass/shrubs   
 
 ###Todo List
 In order of importance:    
--Wild grass/shrubs   
 -Biome support   
 -Cacti   
 -Caves   
