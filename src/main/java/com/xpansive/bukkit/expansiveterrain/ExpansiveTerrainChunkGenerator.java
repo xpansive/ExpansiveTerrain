@@ -1,5 +1,6 @@
 package com.xpansive.bukkit.expansiveterrain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -22,11 +23,11 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 			v = new VoronoiNoise(random);
 
 		byte[] result = new byte[32768];
-		v.genChunks(cx * 16, cz * 16, 16, 16, 2);
+		int[][] voronoiBuf = v.genChunks(cx * 16, cz * 16, 16, 16, 2);
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				int height = v.get(cx * 16 + x, cz * 16 + z) / 20;
+				int height = voronoiBuf[x][z] / 17;
 				height *= Math.min(PerlinNoiseGenerator.getNoise(((double) (cx * 16 + x)) / 50,
 						((double) (cz * 16 + z)) / 50, 3, 2, .7) + 1, 1);
 
@@ -73,8 +74,9 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 	}
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
-		return Arrays.asList((BlockPopulator) new TreePopulator(), new OrePopulator(), new FlowerPopulator(),
-				new PumpkinPopulator(), new MushroomPopulator(), new WildGrassPopulator());
+		return Arrays.asList((BlockPopulator) new PumpkinPopulator(), new FlowerPopulator(), new SandPopulator(),
+				new SnowPopulator(), new TreePopulator(), new OrePopulator(), new MushroomPopulator(),
+				new WildGrassPopulator());
 	}
 
 	@Override
