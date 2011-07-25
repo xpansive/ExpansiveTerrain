@@ -4,6 +4,7 @@ import java.util.Random;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.generator.BlockPopulator;
 
 public class FlowerPopulator extends BlockPopulator {
@@ -15,15 +16,14 @@ public class FlowerPopulator extends BlockPopulator {
 		if (random.nextInt(100) < 7) { // 7% chance
 			int x = (source.getX() << 4) + random.nextInt(16);
 			int z = (source.getZ() << 4) + random.nextInt(16);
-			Material flowerType = random.nextBoolean() ? Material.RED_ROSE
-					: Material.YELLOW_FLOWER;
+			Material flowerType = random.nextBoolean() ? Material.RED_ROSE : Material.YELLOW_FLOWER;
 
 			for (int i = 0; i < NUM_STEPS; i++) {
 				x += random.nextInt(3) - 1;
 				z += random.nextInt(3) - 1;
 				int y = world.getHighestBlockYAt(x, z);
 				if (world.getBlockAt(x, y - 1, z).getType() == Material.GRASS
-						&& random.nextInt(100) > 5) { //5% chance of blank spot 
+						&& world.getBlockAt(x, y - 1, z).getBiome() != Biome.DESERT && random.nextInt(100) > 5) {
 					setBlock(world, x, y, z, flowerType);
 				}
 			}
