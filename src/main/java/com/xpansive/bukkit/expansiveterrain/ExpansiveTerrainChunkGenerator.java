@@ -1,6 +1,5 @@
 package com.xpansive.bukkit.expansiveterrain;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -34,10 +33,9 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 				height += 32;
 
 				height = Math.min(height, 127);
-				int dirtHeight = random.nextInt(3) + 2;
+				int dirtHeight = random.nextInt(5) + 3;
 				int snowHeight = random.nextInt(4);
 				for (int y = 0; y <= height; y++) {
-
 					int offset = getOffset(x, y, z);
 
 					// cover the bottom layer with bedrock
@@ -55,7 +53,8 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 						result[offset] = (byte) Material.STONE.getId();
 
 					if (y > 80 - snowHeight) {
-						result[getOffset(x, y + 1, z)] = (byte) Material.SNOW.getId();
+						if (y + 1 < 128)
+							result[getOffset(x, y + 1, z)] = (byte) Material.SNOW.getId();
 					}
 				}
 			}
@@ -75,7 +74,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
 	public List<BlockPopulator> getDefaultPopulators(World world) {
 		return Arrays.asList((BlockPopulator) new PumpkinPopulator(), new FlowerPopulator(), new SandPopulator(),
-				new SnowPopulator(), new TreePopulator(), new OrePopulator(), new MushroomPopulator(),
+				new TreePopulator(), new SnowPopulator(), new OrePopulator(), new MushroomPopulator(),
 				new WildGrassPopulator());
 	}
 

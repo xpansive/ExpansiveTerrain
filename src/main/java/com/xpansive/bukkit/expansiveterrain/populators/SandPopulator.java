@@ -22,7 +22,7 @@ public class SandPopulator extends BlockPopulator {
 				Block b = world.getBlockAt(chunkx + x, y - 1, chunkz + z);
 				if (b.getBiome() == Biome.DESERT) {
 					b.setType(Material.SAND);
-					for (int i = 1; i < 5; i++) {
+					for (int i = 1; i < 8; i++) {
 						Block cur = b.getRelative(0, -i, 0);
 						if (cur.getType() == Material.DIRT) {
 							cur.setType(Material.SANDSTONE);
