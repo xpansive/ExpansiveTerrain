@@ -18,12 +18,13 @@ The jar will be in the target folder (if it builds sucessfully).
 -Mushrooms   
 -Wild grass/shrubs   
 -Biome support   
+-Cacti   
 
 ###Todo List
 In order of importance:    
--Cacti   
 -Caves   
 -Lakes   
 -Reeds   
+-Varying biome-based terrian heights   
 -More tree types   
 -Dungeons/ruins?   
