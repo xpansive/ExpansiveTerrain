@@ -5,6 +5,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.Location;
@@ -84,16 +85,23 @@ public class TreePopulator extends BlockPopulator {
 			int treeType = random.nextInt(100);
 			boolean treePlanted = false;
 
+			Location loc;
+			if (world.getBiome(x, z) == Biome.TAIGA || world.getBiome(x, z) == Biome.TUNDRA) {
+				world.getBlockAt(x, y - 1, z).setType(Material.AIR);
+				loc = new Location(world, x, y - 1, z);
+			} else
+				loc = new Location(world, x, y, z);
+
 			if (treeType < birchChance) {
-				treePlanted = world.generateTree(new Location(world, x, y, z), TreeType.BIRCH);
+				treePlanted = world.generateTree(loc, TreeType.BIRCH);
 			} else if (treeType < redwoodChance) {
-				treePlanted = world.generateTree(new Location(world, x, y, z), TreeType.REDWOOD);
+				treePlanted = world.generateTree(loc, TreeType.REDWOOD);
 			} else if (treeType < tallRedwoodChance) {
-				treePlanted = world.generateTree(new Location(world, x, y, z), TreeType.TALL_REDWOOD);
+				treePlanted = world.generateTree(loc, TreeType.TALL_REDWOOD);
 			} else if (treeType < treeChance) {
-				treePlanted = world.generateTree(new Location(world, x, y, z), TreeType.TREE);
+				treePlanted = world.generateTree(loc, TreeType.TREE);
 			} else if (treeType < bigTreeChance) {
-				treePlanted = world.generateTree(new Location(world, x, y, z), TreeType.BIG_TREE);
+				treePlanted = world.generateTree(loc, TreeType.BIG_TREE);
 			}
 			if (treePlanted) {
 				for (int i = 0; i < shrubNum; i++) {
@@ -109,5 +117,4 @@ public class TreePopulator extends BlockPopulator {
 			}
 		}
 	}
-
 }
