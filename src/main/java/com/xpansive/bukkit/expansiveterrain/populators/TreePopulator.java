@@ -55,7 +55,7 @@ public class TreePopulator extends BlockPopulator {
 		case TAIGA:
 			redwoodChance = 50;
 			tallRedwoodChance = 100;
-			treeNum = 2;
+			treeNum = 4;
 			break;
 		case PLAINS:
 			birchChance = 3;
