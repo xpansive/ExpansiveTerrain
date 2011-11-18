@@ -21,7 +21,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
     private String worldName;
 
     private final int OCEAN_LEVEL = 55;
-    private final int SNOW_LEVEL = 90;
+    private final int SNOW_LEVEL = 110;
     private final int MIN_DIRT_DEPTH = 3;
     private final int MAX_DIRT_DEPTH = 7;
 
@@ -49,7 +49,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                 height += Math.min(perlin.noise(((double) (cx * 16 + x)) / 50, ((double) (cz * 16 + z)) / 50, 3, 2, 0.7) + 1, 1) * 15;
                 height += voronoiBuf[x][z] / 17;
 
-                height = Math.min(height, 127);
+                height = Math.min(height, 126);
 
                 fillColumn(x, z, height, biome, result);
             }
