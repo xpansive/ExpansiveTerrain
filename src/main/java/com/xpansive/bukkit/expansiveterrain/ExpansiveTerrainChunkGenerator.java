@@ -19,12 +19,12 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
     private PerlinNoiseGenerator perlin;
     private boolean initalized;
     private String worldName;
-    
+
     private final int OCEAN_LEVEL = 55;
     private final int SNOW_LEVEL = 90;
     private final int MIN_DIRT_DEPTH = 3;
     private final int MAX_DIRT_DEPTH = 7;
-    
+
     public ExpansiveTerrainChunkGenerator(String worldName) {
         this.worldName = worldName;
     }
@@ -43,15 +43,14 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
             for (int z = 0; z < 16; z++) {
                 Biome biome = world.getBiome(cx * 16 + x, cz * 16 + z);
 
-                
-                //This is where the magic happens
+                // This is where the magic happens
                 int height = OCEAN_LEVEL;
                 height *= perlin.noise(((double) (cx * 16 + x)) / 300, ((double) (cz * 16 + z)) / 300, 3, 2, 0.7) * 0.8 + 0.8;
                 height += Math.min(perlin.noise(((double) (cx * 16 + x)) / 50, ((double) (cz * 16 + z)) / 50, 3, 2, 0.7) + 1, 1) * 15;
                 height += voronoiBuf[x][z] / 17;
-                
+
                 height = Math.min(height, 127);
-                
+
                 fillColumn(x, z, height, biome, result);
             }
         }
@@ -59,7 +58,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
         return result;
 
     }
-    
+
     void fillColumn(int x, int z, int height, Biome biome, byte[] buffer) {
         int dirtHeight = MIN_DIRT_DEPTH + (int) (random.nextDouble() * ((MAX_DIRT_DEPTH - MIN_DIRT_DEPTH) + 1));
 
@@ -75,8 +74,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                 else if (y == height && y >= OCEAN_LEVEL) {
                     if (biome == Biome.DESERT) {
                         buffer[offset] = (byte) Material.SAND.getId();
-                    }
-                    else {
+                    } else {
                         buffer[offset] = (byte) Material.GRASS.getId();
                     }
                 }
@@ -84,8 +82,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                 else if (y > height - dirtHeight) {
                     if (biome == Biome.DESERT) {
                         buffer[offset] = (byte) Material.SANDSTONE.getId();
-                    }
-                    else {
+                    } else {
                         buffer[offset] = (byte) Material.DIRT.getId();
                     }
                 }
@@ -97,7 +94,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                 if (((y > SNOW_LEVEL && biome != Biome.DESERT) || biome == Biome.TUNDRA || biome == Biome.TAIGA) && y + 1 < 128) {
                     buffer[getOffset(x, y + 1, z)] = (byte) Material.SNOW.getId();
                 }
-                
+
             } else {
                 if (y <= OCEAN_LEVEL && buffer[offset] == 0) {
                     buffer[offset] = (byte) Material.STATIONARY_WATER.getId();
@@ -123,8 +120,8 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
     @Override
     public Location getFixedSpawnLocation(World world, Random random) {
-        int x = 0;//random.nextInt(250) - 250;
-        int z = 0;//random.nextInt(250) - 250;
+        int x = 0;// random.nextInt(250) - 250;
+        int z = 0;// random.nextInt(250) - 250;
         int y = world.getHighestBlockYAt(x, z);
         return new Location(world, x, y, z);
     }
