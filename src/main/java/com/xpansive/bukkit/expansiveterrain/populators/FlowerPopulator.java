@@ -30,7 +30,7 @@ public class FlowerPopulator extends BlockPopulator {
 		}
 	}
 
-	private void setBlock(World w, int x, int y, int z, Material m) {
+	private static void setBlock(World w, int x, int y, int z, Material m) {
 		w.getBlockAt(x, y, z).setType(m);
 	}
 }

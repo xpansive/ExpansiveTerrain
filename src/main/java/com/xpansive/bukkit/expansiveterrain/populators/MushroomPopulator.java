@@ -47,7 +47,7 @@ public class MushroomPopulator extends BlockPopulator {
 		}
 	}
 
-	private int getLightLevel(World w, int x, int y, int z) {
+	private static int getLightLevel(World w, int x, int y, int z) {
 		return w.getBlockAt(x, y, z).getLightLevel();
 	}
 }

@@ -9,7 +9,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExpansiveTerrain extends JavaPlugin {
-	public final static String WORLD_NAME = "ExpansiveTerrain";
+	private final static String WORLD_NAME = "ExpansiveTerrain";
 	private static World genWorld = null;
 
 	public void onDisable() {
@@ -32,13 +32,13 @@ public class ExpansiveTerrain extends JavaPlugin {
 		if (genWorld == null) {
 			genWorld = Bukkit.getServer().createWorld(WORLD_NAME,
 					World.Environment.NORMAL,
-					new ExpansiveTerrainChunkGenerator());
+					new ExpansiveTerrainChunkGenerator(WORLD_NAME));
 		}
 		return genWorld;
 	}
 
 	@Override
 	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
-		return new ExpansiveTerrainChunkGenerator();
+		return new ExpansiveTerrainChunkGenerator(worldName);
 	}
 }

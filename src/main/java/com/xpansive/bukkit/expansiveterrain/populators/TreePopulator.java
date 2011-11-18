@@ -87,7 +87,9 @@ public class TreePopulator extends BlockPopulator {
 
 			Location loc;
 			if (world.getBiome(x, z) == Biome.TAIGA || world.getBiome(x, z) == Biome.TUNDRA) {
-				world.getBlockAt(x, y - 1, z).setType(Material.AIR);
+			    Block block = world.getBlockAt(x, y - 1, z);
+			    if (block.getType() == Material.SNOW)
+			        block.setType(Material.AIR);
 				loc = new Location(world, x, y - 1, z);
 			} else
 				loc = new Location(world, x, y, z);

@@ -33,7 +33,8 @@ public class OrePopulator extends BlockPopulator {
 		for (int i = 0; i < DEPOSITS_PER_CHUNK; i++) {
 			int x = (source.getX() << 4) + random.nextInt(16);
 			int z = (source.getZ() << 4) + random.nextInt(16);
-			int y = random.nextInt(world.getHighestBlockYAt(x, z));
+			int highY = Math.max(128, world.getHighestBlockYAt(x, z));
+			int y = random.nextInt(highY);
 
 			int index = random.nextInt(ORES.length);
 			int xsize = random.nextInt(MAX_DEPOSIT_SIZE[index] + 1);
@@ -52,7 +53,7 @@ public class OrePopulator extends BlockPopulator {
 						for (Material mat : CHANGEABLE_BLOCKS)
 							placeOre |= mat.getId() == type.getTypeId();
 
-						if (!placeOre || random.nextDouble() > .5)
+						if (!placeOre || random.nextDouble() > 0.5)
 							continue;
 
 						setBlock(world, cx, cy, cz, ore);
@@ -62,7 +63,7 @@ public class OrePopulator extends BlockPopulator {
 		}
 	}
 
-	private void setBlock(World w, int x, int y, int z, Material m) {
+	private static void setBlock(World w, int x, int y, int z, Material m) {
 		w.getBlockAt(x, y, z).setType(m);
 	}
 }

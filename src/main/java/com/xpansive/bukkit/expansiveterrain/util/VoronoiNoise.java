@@ -13,15 +13,17 @@ public class VoronoiNoise {
 	private Random random;
 	private ArrayList<Point> generatedChunks;
 	private final int CALC_OFFSET = 3;
+	private String dataDir;
 
-	public VoronoiNoise(Random random) {
+	public VoronoiNoise(Random random, String dataDir) {
 		this.random = random;
+		this.dataDir = dataDir;
 		load();
 	}
 
 	private void save() {
 		try {
-			OutputStream file = new FileOutputStream(ExpansiveTerrain.WORLD_NAME + "/chunks.ser");
+			OutputStream file = new FileOutputStream(dataDir + "/chunks.ser");
 			OutputStream buffer = new BufferedOutputStream(file);
 			ObjectOutput output = new ObjectOutputStream(buffer);
 			try {
@@ -44,7 +46,7 @@ public class VoronoiNoise {
 		chunks = new ArrayList<Chunk>();
 
 		try {
-			InputStream file = new FileInputStream(ExpansiveTerrain.WORLD_NAME + "/chunks.ser");
+			InputStream file = new FileInputStream(dataDir + "/chunks.ser");
 			InputStream buffer = new BufferedInputStream(file);
 			ObjectInput input = new ObjectInputStream(buffer);
 			try {
@@ -101,7 +103,7 @@ public class VoronoiNoise {
 				int lowestDistance = Integer.MAX_VALUE;
 				for (Chunk chunk : currChunks) {
 					for (Point3D point : chunk.points) {
-						int temp = distance(new Point(dx, dy), point);
+						int temp = value(new Point(dx, dy), point);
 
 						if (temp > lowestDistance)
 							continue;
@@ -120,12 +122,8 @@ public class VoronoiNoise {
 		return min + (int) (random.nextDouble() * ((max - min) + 1));
 	}
 
-	private static int distance(Point p1, Point3D p2) {
+	private static int value(Point p1, Point3D p2) {
 		int x = (int) (p2.x - p1.x), y = (int) (p2.y - p1.y);
-		// return (int) Math.sqrt(x * x + y * y); // Length
-		return x * x + y * y + p2.z * 25; // Length2
-		// return (int)(Math.Abs(x) + Math.Abs(y)); //Manhattan
-		// return (int)Math.Pow(x * x * x * x + y * y * y * y, 0.25);
-		// //Minkowski4
+		return x * x + y * y + p2.z * 25;
 	}
 }
