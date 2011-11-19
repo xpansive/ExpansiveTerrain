@@ -22,7 +22,7 @@ public class TreePopulator extends BlockPopulator {
 
         int birchChance = 0, treeChance = 0, bigTreeChance = 0, redwoodChance = 0, tallRedwoodChance = 0, treeNum = 0;
 
-        switch (world.getBlockAt(x, y, z).getBiome()) {
+        switch (world.getBiome(x, z)) {
         case RAINFOREST:
             birchChance = 20;
             treeChance = 40;
@@ -85,15 +85,13 @@ public class TreePopulator extends BlockPopulator {
             int treeType = random.nextInt(100);
             boolean treePlanted = false;
 
-            Location loc;
+            Location loc = new Location(world, x, y, z);
             if (world.getBiome(x, z) == Biome.TAIGA || world.getBiome(x, z) == Biome.TUNDRA) {
-                Block block = world.getBlockAt(x, y - 1, z);
-                if (block.getType() == Material.SNOW)
-                    block.setType(Material.AIR);
-                loc = new Location(world, x, y - 1, z);
-            } else
-                loc = new Location(world, x, y, z);
-
+                Block block = world.getBlockAt(x, y, z);
+                if (block.getType() == Material.SNOW) {
+                    block.setType(Material.SPONGE);
+                }
+            }
             if (treeType < birchChance) {
                 treePlanted = world.generateTree(loc, TreeType.BIRCH);
             } else if (treeType < redwoodChance) {
