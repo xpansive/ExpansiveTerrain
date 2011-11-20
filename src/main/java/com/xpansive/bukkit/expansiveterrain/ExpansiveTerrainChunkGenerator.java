@@ -111,7 +111,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
     }
 
     public boolean canSpawn(World world, int x, int z) {
-        return true;
+        return world.getHighestBlockAt(x, z).getType() == Material.GRASS;
     }
 
     public List<BlockPopulator> getDefaultPopulators(World world) {
