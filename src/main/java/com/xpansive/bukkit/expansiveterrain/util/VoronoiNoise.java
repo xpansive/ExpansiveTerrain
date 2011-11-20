@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-import com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain;
-
 public class VoronoiNoise {
     private ArrayList<Chunk> chunks;
     private Random random;

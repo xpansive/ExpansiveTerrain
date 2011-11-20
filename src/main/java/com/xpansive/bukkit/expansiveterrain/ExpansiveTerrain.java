@@ -2,6 +2,7 @@ package com.xpansive.bukkit.expansiveterrain;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -28,10 +29,17 @@ public class ExpansiveTerrain extends JavaPlugin {
     }
 
     public static World getExpansiveTerrainWorld() {
-        if (genWorld == null) {
-            genWorld = Bukkit.getServer().createWorld(WORLD_NAME, World.Environment.NORMAL, new ExpansiveTerrainChunkGenerator(WORLD_NAME));
-        }
-        return genWorld;
+    	//Thanks to echurchill on github for pointing this out
+    	if (genWorld == null) {
+			genWorld = Bukkit.getServer().getWorld(WORLD_NAME);
+			if (genWorld == null) {
+				WorldCreator worldcreator = new WorldCreator(WORLD_NAME);
+				worldcreator.environment(World.Environment.NORMAL);
+				worldcreator.generator(new ExpansiveTerrainChunkGenerator(WORLD_NAME));
+				genWorld = Bukkit.getServer().createWorld(worldcreator);
+			}
+		}
+		return genWorld;
     }
 
     @Override

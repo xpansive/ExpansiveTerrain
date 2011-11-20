@@ -91,7 +91,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                     buffer[offset] = (byte) Material.STONE.getId();
                 }
 
-                if (((y > SNOW_LEVEL && biome != Biome.DESERT) || biome == Biome.TUNDRA || biome == Biome.TAIGA) && y + 1 < 128) {
+                if (((y > SNOW_LEVEL && biome != Biome.DESERT) || biome == Biome.TUNDRA || biome == Biome.TAIGA) && y + 1 < 128 && y >= OCEAN_LEVEL) {
                     buffer[getOffset(x, y + 1, z)] = (byte) Material.SNOW.getId();
                 }
 
@@ -115,13 +115,13 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
     }
 
     public List<BlockPopulator> getDefaultPopulators(World world) {
-        return Arrays.asList((BlockPopulator) new PumpkinPopulator(), new FlowerPopulator(), new TreePopulator(), new OrePopulator(), new MushroomPopulator(), new WildGrassPopulator(), new CactusPopulator());
+        return Arrays.asList((BlockPopulator) new PumpkinPopulator(), new MelonPopulator(), new FlowerPopulator(), new TreePopulator(), new OrePopulator(), new MushroomPopulator(), new WildGrassPopulator(), new CactusPopulator());
     }
 
     @Override
     public Location getFixedSpawnLocation(World world, Random random) {
-        int x = 0;// random.nextInt(250) - 250;
-        int z = 0;// random.nextInt(250) - 250;
+        int x = random.nextInt(250) - 250;
+        int z = random.nextInt(250) - 250;
         int y = world.getHighestBlockYAt(x, z);
         return new Location(world, x, y, z);
     }

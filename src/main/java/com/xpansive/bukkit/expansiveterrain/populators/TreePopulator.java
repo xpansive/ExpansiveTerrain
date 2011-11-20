@@ -7,6 +7,7 @@ import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.Location;
 
@@ -86,12 +87,19 @@ public class TreePopulator extends BlockPopulator {
             boolean treePlanted = false;
 
             Location loc = new Location(world, x, y, z);
+            //If this is a snowy biome, remove the snow to allow room for trees
             if (world.getBiome(x, z) == Biome.TAIGA || world.getBiome(x, z) == Biome.TUNDRA) {
                 Block block = world.getBlockAt(x, y, z);
                 if (block.getType() == Material.SNOW) {
-                    block.setType(Material.SPONGE);
+                    block.setType(Material.AIR);
                 }
             }
+            
+            //Don't bother trying if it's not dirt or grass
+            Block block = world.getBlockAt(x, y - 1, z);
+            if (block.getType() != Material.GRASS && block.getType() != Material.DIRT) 
+                return;
+            
             if (treeType < birchChance) {
                 treePlanted = world.generateTree(loc, TreeType.BIRCH);
             } else if (treeType < redwoodChance) {
@@ -112,6 +120,13 @@ public class TreePopulator extends BlockPopulator {
 
                         b.setData((byte) (random.nextInt(100) < 3 ? 0 : 2));
                     }
+                }
+            }
+            else {
+                //Put the snow back if the tree didn't happen
+                if (world.getBiome(x, z) == Biome.TAIGA || world.getBiome(x, z) == Biome.TUNDRA) {
+                    Block blk = world.getBlockAt(x, y, z);
+                    blk.setType(Material.SNOW);
                 }
             }
         }
