@@ -52,3 +52,6 @@ Simpily generate a new world (see documentation on your world manager for how to
 -Better ore populator   
 -Better tree populator   
 -Cooler jungles and swamps   
+
+###Bugs
+-Mushrooms sometimes get planted where they shouldn't, espically at night (I've seen lakes with hundreds of mushrooms on them)
