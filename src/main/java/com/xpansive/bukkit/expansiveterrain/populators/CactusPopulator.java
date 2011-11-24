@@ -4,36 +4,59 @@ import java.util.Random;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.generator.BlockPopulator;
 
 public class CactusPopulator extends BlockPopulator {
 
+    private int minHeight, maxHeight, cactusPatchRadius, cactusPatchChance,
+            newCactusChance;
+
+    public CactusPopulator(int minHeight, int maxHeight, int cactusPatchRadius,
+            int cactusPatchChance, int newCactusChance) {
+        this.minHeight = minHeight;
+        this.maxHeight = maxHeight;
+        this.cactusPatchRadius = cactusPatchRadius;
+        this.cactusPatchChance = cactusPatchChance;
+        this.newCactusChance = newCactusChance;
+    }
+
     @Override
     public void populate(World world, Random random, Chunk source) {
-        boolean plantNewCactus = random.nextInt(100) < 30;
+        // Determine if we should plant anything at all
+        boolean plantNewCactus = random.nextInt(100) < cactusPatchChance;
+
         int x = (source.getX() << 4) + random.nextInt(16);
         int z = (source.getZ() << 4) + random.nextInt(16);
+
         while (plantNewCactus) {
-            x += random.nextInt(10) - 5;
-            z += random.nextInt(10) - 5;
-            if (world.getBiome(x, z) == Biome.DESERT) {
-                int y = world.getHighestBlockYAt(x, z);
-                Block b = world.getBlockAt(x, y, z);
+            // Pick some random coordinates
+            x += random.nextInt(cactusPatchRadius * 2) - cactusPatchRadius;
+            z += random.nextInt(cactusPatchRadius * 2) - cactusPatchRadius;
 
-                if (b.getRelative(BlockFace.DOWN).getType() == Material.SAND) {
-                    int height = random.nextInt(2) + 2; // 2 - 3
+            int y = world.getHighestBlockYAt(x, z);
+            Block b = world.getBlockAt(x, y, z);
 
-                    for (int i = 0; i < height; i++) {
-                        if (b.getRelative(BlockFace.NORTH).getTypeId() == 0 && b.getRelative(BlockFace.EAST).getTypeId() == 0 && b.getRelative(BlockFace.SOUTH).getTypeId() == 0 && b.getRelative(BlockFace.WEST).getTypeId() == 0)
-                            b.getRelative(0, i, 0).setType(Material.CACTUS);
-                    }
+            // Check if we're planting it on sand
+            if (b.getRelative(BlockFace.DOWN).getType() == Material.SAND) {
+                // Determine the height of the cactus
+                int height = random.nextInt(maxHeight - minHeight + 1)
+                        + minHeight;
+
+                for (int i = 0; i < height; i++) {
+                    // Cacti can only be planted if there are no blocks adjacent
+                    // to them
+                    if (b.getRelative(BlockFace.NORTH).getTypeId() == 0
+                            && b.getRelative(BlockFace.EAST).getTypeId() == 0
+                            && b.getRelative(BlockFace.SOUTH).getTypeId() == 0
+                            && b.getRelative(BlockFace.WEST).getTypeId() == 0)
+                        b.getRelative(0, i, 0).setType(Material.CACTUS);
                 }
             }
-            plantNewCactus = random.nextInt(100) < 80;
         }
+        // Determine if we should continue, planting more cacti in this patch
+        plantNewCactus = random.nextInt(100) < newCactusChance;
     }
 
 }
