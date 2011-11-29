@@ -5,6 +5,7 @@ import java.util.Random;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 
 public class PumpkinPopulator extends BlockPopulator {
@@ -31,8 +32,11 @@ public class PumpkinPopulator extends BlockPopulator {
                 int y = world.getHighestBlockYAt(cx, cz);
 
                 // If it's grass, place a pumpkin on top
-                if (world.getBlockAt(cx, y - 1, cz).getType() == Material.GRASS)
-                    world.getBlockAt(cx, y, cz).setType(Material.PUMPKIN);
+                if (world.getBlockAt(cx, y - 1, cz).getType() == Material.GRASS) {
+                    Block pumpkin = world.getBlockAt(cx, y, cz);
+                    pumpkin.setType(Material.PUMPKIN);
+                    pumpkin.setData((byte) random.nextInt(5));
+                }
             }
         }
     }

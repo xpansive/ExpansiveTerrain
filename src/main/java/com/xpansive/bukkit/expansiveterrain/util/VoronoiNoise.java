@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class VoronoiNoise {
-    private ArrayList<Chunk> chunks;
+    private ArrayList<VoronoiChunk> voronoiChunks;
     private Random random;
     private ArrayList<Point> generatedChunks;
     private final int CALC_OFFSET = 3;
@@ -21,12 +21,12 @@ public class VoronoiNoise {
 
     private void save() {
         try {
-            OutputStream file = new FileOutputStream(dataDir + "/chunks.ser");
+            OutputStream file = new FileOutputStream(dataDir + "/voronoiChunks.ser");
             OutputStream buffer = new BufferedOutputStream(file);
             ObjectOutput output = new ObjectOutputStream(buffer);
             try {
                 Stack<Object> s = new Stack<Object>();
-                s.push(chunks);
+                s.push(voronoiChunks);
                 s.push(generatedChunks);
 
                 output.writeObject(s);
@@ -41,10 +41,10 @@ public class VoronoiNoise {
     @SuppressWarnings("unchecked")
     private void load() {
         generatedChunks = new ArrayList<Point>();
-        chunks = new ArrayList<Chunk>();
+        voronoiChunks = new ArrayList<VoronoiChunk>();
 
         try {
-            InputStream file = new FileInputStream(dataDir + "/chunks.ser");
+            InputStream file = new FileInputStream(dataDir + "/voronoiChunks.ser");
             InputStream buffer = new BufferedInputStream(file);
             ObjectInput input = new ObjectInputStream(buffer);
             try {
@@ -53,7 +53,7 @@ public class VoronoiNoise {
                     Stack<Object> s = (Stack<Object>) readObject;
 
                     generatedChunks = (ArrayList<Point>) s.pop();
-                    chunks = (ArrayList<Chunk>) s.pop();
+                    voronoiChunks = (ArrayList<VoronoiChunk>) s.pop();
                 } else
                     System.out.println("ExpansiveTerrain's data file is corrupted or contains the wrong data!");
             } finally {
@@ -67,7 +67,7 @@ public class VoronoiNoise {
     }
 
     public int[][] genChunks(int x, int y, int width, int height, int numPoints) {
-        ArrayList<Chunk> currChunks = new ArrayList<Chunk>();
+        ArrayList<VoronoiChunk> currChunks = new ArrayList<VoronoiChunk>();
         int[][] buf = new int[width][height];
 
         for (int cx = (x >> 4) - CALC_OFFSET; cx < (x >> 4) + CALC_OFFSET; cx++) {
@@ -84,11 +84,11 @@ public class VoronoiNoise {
                 for (int index = 0; index < num; index++) {
                     voronoiPoints.add(new Point3D(random(cx * width, cx * width + width), random(cy * width, cy * width + height), random.nextInt(height)));
                 }
-                chunks.add(new Chunk(cx, cy, voronoiPoints));
+                voronoiChunks.add(new VoronoiChunk(cx, cy, voronoiPoints));
             }
         }
 
-        for (Chunk c : chunks) {
+        for (VoronoiChunk c : voronoiChunks) {
             if (c.x > (x >> 4) - CALC_OFFSET && c.x < (x >> 4) + CALC_OFFSET && c.y > (y >> 4) - CALC_OFFSET && c.y < (y >> 4) + CALC_OFFSET) {
                 currChunks.add(c);
             }
@@ -97,8 +97,8 @@ public class VoronoiNoise {
         for (int dx = x; dx < x + width; dx++) {
             for (int dy = y; dy < y + height; dy++) {
                 int lowestDistance = Integer.MAX_VALUE;
-                for (Chunk chunk : currChunks) {
-                    for (Point3D point : chunk.points) {
+                for (VoronoiChunk voronoiChunk : currChunks) {
+                    for (Point3D point : voronoiChunk.points) {
                         int temp = value(new Point(dx, dy), point);
 
                         if (temp > lowestDistance)

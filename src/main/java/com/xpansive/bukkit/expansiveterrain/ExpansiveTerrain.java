@@ -35,7 +35,7 @@ public class ExpansiveTerrain extends JavaPlugin {
 			if (genWorld == null) {
 				WorldCreator worldcreator = new WorldCreator(WORLD_NAME);
 				worldcreator.environment(World.Environment.NORMAL);
-				worldcreator.generator(new ExpansiveTerrainChunkGenerator(WORLD_NAME));
+				worldcreator.generator(new ExpansiveTerrainChunkGenerator());
 				genWorld = Bukkit.getServer().createWorld(worldcreator);
 			}
 		}
@@ -44,6 +44,6 @@ public class ExpansiveTerrain extends JavaPlugin {
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
-        return new ExpansiveTerrainChunkGenerator(worldName);
+        return new ExpansiveTerrainChunkGenerator();
     }
 }
