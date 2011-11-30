@@ -14,8 +14,10 @@ public abstract class BiomeGenerator {
         switch(biome) {
             case RAINFOREST:
                 return RAINFOREST;
+            case DESERT:
+                return DESERT;
             default:
-                return RAINFOREST; //TODO: Set generator for unhandled biomes
+                return DESERT; //TODO: Set generator for unhandled biomes
         }
     }
     

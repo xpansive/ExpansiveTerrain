@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.generator.BlockPopulator;
 
 import com.xpansive.bukkit.expansiveterrain.populators.*;
-import com.xpansive.bukkit.expansiveterrain.populators.tree.*;
+import com.xpansive.bukkit.expansiveterrain.generators.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.RainforestTerrainGenerator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 

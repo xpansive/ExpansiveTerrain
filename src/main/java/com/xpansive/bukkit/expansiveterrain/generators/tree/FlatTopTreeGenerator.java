@@ -1,10 +1,12 @@
-package com.xpansive.bukkit.expansiveterrain.populators.tree;
+package com.xpansive.bukkit.expansiveterrain.generators.tree;
 
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
+
+import com.xpansive.bukkit.expansiveterrain.generators.tree.TreeGenerator;
 
 public class FlatTopTreeGenerator implements TreeGenerator {
 

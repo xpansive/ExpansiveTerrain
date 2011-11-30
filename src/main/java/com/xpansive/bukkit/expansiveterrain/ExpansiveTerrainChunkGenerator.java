@@ -25,7 +25,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
                 Biome biome = world.getBiome(cx * 16 + x, cz * 16 + z);
                 BiomeGenerator bg = BiomeGenerator.getForBiome(biome);
                 TerrainGenerator tg = bg.getTerrainGenerator();
-                tg.fillColumn(world, r, cx, cz, x, z, result);
+                tg.fillColumn(world, r, cx * 16 + x, cz * 16 + z, x, z, result);
             }
         }
         return result;

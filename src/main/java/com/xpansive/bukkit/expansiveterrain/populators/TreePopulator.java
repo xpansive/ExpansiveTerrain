@@ -6,7 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.populators.tree.*;
+import com.xpansive.bukkit.expansiveterrain.generators.tree.*;
 
 public class TreePopulator extends BlockPopulator {
 
