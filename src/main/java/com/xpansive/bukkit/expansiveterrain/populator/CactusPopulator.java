@@ -54,9 +54,9 @@ public class CactusPopulator extends BlockPopulator {
                         b.getRelative(0, i, 0).setType(Material.CACTUS);
                 }
             }
+            // Determine if we should continue, planting more cacti in this patch
+            plantNewCactus = random.nextInt(100) < newCactusChance;
         }
-        // Determine if we should continue, planting more cacti in this patch
-        plantNewCactus = random.nextInt(100) < newCactusChance;
     }
 
 }
