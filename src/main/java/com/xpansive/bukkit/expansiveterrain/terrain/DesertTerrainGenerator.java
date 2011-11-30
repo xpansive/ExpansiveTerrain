@@ -17,9 +17,11 @@ public class DesertTerrainGenerator extends TerrainGenerator {
             initalized = true;
         }
         
-        double height = 1 - Math.abs(noise.noise(worldX / 125.0, worldZ / 125.0)) * 15;
+        double height = (1 - Math.abs(noise.noise(worldX / 125.0, worldZ / 125.0))) * 15;
         height += noise.noise(worldX / 400.0, worldZ / 400.0) * 20;
-        height += 64;
+        height += 78;
+        
+        height = Math.min(height, world.getMaxHeight() - 1);
         height = Math.floor(height);
         
         for (int y = 0; y <= height; y++) {

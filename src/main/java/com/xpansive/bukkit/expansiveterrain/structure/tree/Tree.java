@@ -1,6 +1,6 @@
-package com.xpansive.bukkit.expansiveterrain.generators.tree;
+package com.xpansive.bukkit.expansiveterrain.structure.tree;
 
-import com.xpansive.bukkit.expansiveterrain.generators.tree.TreeGenerator;
+import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
 public class Tree {
     

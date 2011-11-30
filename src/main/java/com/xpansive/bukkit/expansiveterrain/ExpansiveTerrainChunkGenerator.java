@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 import com.xpansive.bukkit.expansiveterrain.biome.BiomeGenerator;
-import com.xpansive.bukkit.expansiveterrain.populators.TerrainPopulator;
+import com.xpansive.bukkit.expansiveterrain.populator.TerrainPopulator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {

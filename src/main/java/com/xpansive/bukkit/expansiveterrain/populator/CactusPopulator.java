@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.expansiveterrain.populators;
+package com.xpansive.bukkit.expansiveterrain.populator;
 
 import java.util.Random;
 import org.bukkit.Chunk;

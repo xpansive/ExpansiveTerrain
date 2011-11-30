@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.expansiveterrain.generators;
+package com.xpansive.bukkit.expansiveterrain.structure;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.expansiveterrain.generators.tree;
+package com.xpansive.bukkit.expansiveterrain.structure.tree;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 
-import com.xpansive.bukkit.expansiveterrain.generators.tree.TreeGenerator;
+import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
 public class BushGenerator implements TreeGenerator {
 

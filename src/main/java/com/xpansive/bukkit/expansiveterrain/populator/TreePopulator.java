@@ -1,4 +1,4 @@
-package com.xpansive.bukkit.expansiveterrain.populators;
+package com.xpansive.bukkit.expansiveterrain.populator;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.generators.tree.*;
+import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 
 public class TreePopulator extends BlockPopulator {
 

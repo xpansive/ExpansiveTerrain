@@ -12,7 +12,7 @@ public abstract class BiomeGenerator {
     
     public static BiomeGenerator getForBiome(Biome biome) {
         switch(biome) {
-            case RAINFOREST:
+            case FOREST: // Because of 1.8, there are no longer rainforest biomes. Use forest instead.
                 return RAINFOREST;
             case DESERT:
                 return DESERT;

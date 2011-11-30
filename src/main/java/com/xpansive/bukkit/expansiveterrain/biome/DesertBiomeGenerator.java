@@ -2,7 +2,7 @@ package com.xpansive.bukkit.expansiveterrain.biome;
 
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.populators.*;
+import com.xpansive.bukkit.expansiveterrain.populator.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.*;
 
 public class DesertBiomeGenerator extends BiomeGenerator {
