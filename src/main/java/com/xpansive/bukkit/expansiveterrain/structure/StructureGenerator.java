@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.bukkit.World;
 
-public interface ObjectGenerator {
+public interface StructureGenerator {
 
     public boolean generate(World world, Random rand, int x, int y, int z);
 
