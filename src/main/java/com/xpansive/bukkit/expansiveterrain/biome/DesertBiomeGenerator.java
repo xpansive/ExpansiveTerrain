@@ -3,6 +3,7 @@ package com.xpansive.bukkit.expansiveterrain.biome;
 import org.bukkit.generator.BlockPopulator;
 
 import com.xpansive.bukkit.expansiveterrain.populator.*;
+import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.*;
 
 public class DesertBiomeGenerator extends BiomeGenerator {
@@ -12,7 +13,17 @@ public class DesertBiomeGenerator extends BiomeGenerator {
                     6, // Max height
                     5, // Patch radius
                     4, // Patch chance
-                    80) // New cactus chance
+                    80), // New cactus chance
+            new TreePopulator(
+                    new Tree[] {
+                            new Tree(
+                                    new PalmTreeGenerator(),
+                                    100,
+                                    1,
+                                    1)
+                    },
+                    1
+             )
     };
     
     private final TerrainGenerator terrainGen = new DesertTerrainGenerator();

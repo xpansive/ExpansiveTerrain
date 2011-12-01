@@ -17,17 +17,26 @@ public class DesertTerrainGenerator extends TerrainGenerator {
             initalized = true;
         }
         
+        int seaLevel = 64;
+        
         double height = (1 - Math.abs(noise.noise(worldX / 125.0, worldZ / 125.0))) * 15;
-        height += noise.noise(worldX / 400.0, worldZ / 400.0) * 20;
-        height += 78;
+        height += noise.noise(worldX / 400.0, worldZ / 400.0) * 20 + 7;
+        height += seaLevel;
         
         height = Math.min(height, world.getMaxHeight() - 1);
         height = Math.floor(height);
         
-        for (int y = 0; y <= height; y++) {
+        for (int y = 0; y <= Math.max(height, seaLevel); y++) {
             if (y == height) {
-                setBlock(chunkData, x, y, z, Material.SAND);
-            } else {
+                if (y >= seaLevel && y <= seaLevel + 1)
+                    setBlock(chunkData, x, y, z, Material.GRASS);
+                else if (y < seaLevel)
+                    setBlock(chunkData, x, y, z, Material.DIRT);
+                else 
+                    setBlock(chunkData, x, y, z, Material.SAND);
+            } else if (y <= seaLevel && y > height) {
+                setBlock(chunkData, x, y, z, Material.STATIONARY_WATER);
+            } else if (y < height) {
                 setBlock(chunkData, x, y, z, Material.SANDSTONE);
             }
         }
