@@ -10,7 +10,7 @@ import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
 public class FlatTopTreeGenerator implements TreeGenerator {
 
-    int minHeight, maxHeight, minRadius, maxRadius, vineChance;
+    private int minHeight, maxHeight, minRadius, maxRadius, vineChance;
 
     public FlatTopTreeGenerator(int minHeight, int maxHeight, int minRadius, int maxRadius, int vineChance) {
         this.minHeight = minHeight;
