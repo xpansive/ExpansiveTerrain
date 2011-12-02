@@ -1,0 +1,47 @@
+biome:
+  desert:
+    cactus:
+      minheight: 1
+      maxheight: 6
+      patchradius: 5
+      patchchance: 4
+      newcactuschance: 80
+    tree:
+      treetypesperchunk: 1
+      palmtree:
+        minheight: 8
+        maxheight: 12
+        chanceperchunk: 100
+        minperchunk: 1
+        maxperchunk: 2
+  rainforest:
+    tree:
+      treetypesperchunk: 1
+      bush:
+        minradius: 1
+        maxradius: 4
+        logchance: 75
+        chanceperchunk: 20
+        minperchunk: 1
+        maxperchunk: 1
+      flattoptree:
+        minheight: 12
+        maxheight: 20
+        minradius: 8
+        maxradius: 12
+        vinechance: 20
+        chanceperchunk: 5
+        minperchunk: 1
+        maxperchunk: 1
+    flower:
+      flowerpatchchance: 10
+      flowerchance: 95
+      flowernum: 20
+    melon:
+      chanceper1000: 7
+      maxnum: 15
+      radius: 5
+    pumpkin:
+      chanceper1000: 10
+      maxnum: 20
+      radius: 5

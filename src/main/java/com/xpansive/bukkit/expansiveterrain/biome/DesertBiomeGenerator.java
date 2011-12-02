@@ -1,44 +1,48 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
+import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.BlockPopulator;
 
+import com.xpansive.bukkit.expansiveterrain.Config;
 import com.xpansive.bukkit.expansiveterrain.populator.*;
 import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.*;
 
-public class DesertBiomeGenerator extends BiomeGenerator {
-    private final BlockPopulator[] populators = new BlockPopulator[] { 
-            new CactusPopulator(
-                    1, // Min height
-                    6, // Max height
-                    5, // Patch radius
-                    4, // Patch chance
-                    80), // New cactus chance
-            new TreePopulator(
-                    new Tree[] {
-                            new Tree(
-                                    new PalmTreeGenerator(
-                                            8, // Min height
-                                            12 // Max height
-                                            ),
-                                    100, // Chance per chunk
-                                    1, // Min per chunk
-                                    2) // Max per chunk
-                    },
-                    1
-             )
-    };
-    
+public class DesertBiomeGenerator implements BiomeGenerator {
+    private final BlockPopulator[] populators;
     private final TerrainGenerator terrainGen = new DesertTerrainGenerator();
 
-    @Override
+    public DesertBiomeGenerator(World world) {
+        FileConfiguration config = Config.getConfig(world.getWorldFolder().getName());
+        CactusPopulator cactus = new CactusPopulator(
+                config.getInt("biome.desert.cactus.minheight"),
+                config.getInt("biome.desert.cactus.maxheight"),
+                config.getInt("biome.desert.cactus.patchradius"),
+                config.getInt("biome.desert.cactus.patchchance"),
+                config.getInt("biome.desert.cactus.newcactuschance"));
+        TreePopulator tree = new TreePopulator(
+                new Tree[] {
+                        new Tree(
+                                new PalmTreeGenerator(
+                                        config.getInt("biome.desert.tree.palmtree.minheight"),
+                                        config.getInt("biome.desert.tree.palmtree.maxheight")),
+                                config.getInt("biome.desert.tree.palmtree.chanceperchunk"),
+                                config.getInt("biome.desert.tree.palmtree.minperchunk"),
+                                config.getInt("biome.desert.tree.palmtree.maxperchunk"))
+                },
+                config.getInt("biome.desert.tree.treetypesperchunk"));
+
+        populators = new BlockPopulator[] {
+                cactus, tree
+        };
+    }
+
     public BlockPopulator[] getPopulators() {
         return populators;
     }
 
-    @Override
     public TerrainGenerator getTerrainGenerator() {
         return terrainGen;
     }
-
 }

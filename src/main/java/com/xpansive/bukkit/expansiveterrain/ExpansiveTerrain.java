@@ -10,8 +10,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExpansiveTerrain extends JavaPlugin {
-    private final static String WORLD_NAME = "ExpansiveTerrain";
-    private static World genWorld = null;
+    private final String WORLD_NAME = "ExpansiveTerrain";
+    private World genWorld = null;
 
     public void onDisable() {
     }
@@ -21,29 +21,30 @@ public class ExpansiveTerrain extends JavaPlugin {
 
         System.out.println(desc.getName() + " version " + desc.getVersion() + " is enabled!");
 
-        getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec());
+        getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec(this));
     }
 
     public boolean anonymousCheck(CommandSender sender) {
         return sender instanceof Player;
     }
 
-    public static World getExpansiveTerrainWorld() {
-    	//Thanks to echurchill on github for pointing this out
-    	if (genWorld == null) {
-			genWorld = Bukkit.getServer().getWorld(WORLD_NAME);
-			if (genWorld == null) {
-				WorldCreator worldcreator = new WorldCreator(WORLD_NAME);
-				worldcreator.environment(World.Environment.NORMAL);
-				worldcreator.generator(new ExpansiveTerrainChunkGenerator());
-				genWorld = Bukkit.getServer().createWorld(worldcreator);
-			}
-		}
-		return genWorld;
+    public World getExpansiveTerrainWorld() {
+        // Thanks to echurchill on github for pointing this out
+        if (genWorld == null) {
+            genWorld = Bukkit.getServer().getWorld(WORLD_NAME);
+            if (genWorld == null) {
+                WorldCreator worldcreator = new WorldCreator(WORLD_NAME);
+                worldcreator.environment(World.Environment.NORMAL);
+                worldcreator.generator(new ExpansiveTerrainChunkGenerator());
+                genWorld = Bukkit.getServer().createWorld(worldcreator);
+            }
+        }
+        return genWorld;
     }
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        Config.loadConfig(this, worldName);
         return new ExpansiveTerrainChunkGenerator();
     }
 }

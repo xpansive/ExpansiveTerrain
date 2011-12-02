@@ -11,19 +11,27 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 import com.xpansive.bukkit.expansiveterrain.biome.BiomeGenerator;
+import com.xpansive.bukkit.expansiveterrain.biome.BiomeGeneratorFactory;
 import com.xpansive.bukkit.expansiveterrain.populator.TerrainPopulator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
-    
+    private boolean initialized = false;
+    private BiomeGeneratorFactory biomeGenerator;
+
     @Override
     public byte[] generate(World world, Random r, int cx, int cz) {
+        if (!initialized) {
+            biomeGenerator = new BiomeGeneratorFactory(world);
+            initialized = true;
+        }
+
         byte[] result = new byte[32768];
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 Biome biome = world.getBiome(cx * 16 + x, cz * 16 + z);
-                BiomeGenerator bg = BiomeGenerator.getForBiome(biome);
+                BiomeGenerator bg = biomeGenerator.getForBiome(biome);
                 TerrainGenerator tg = bg.getTerrainGenerator();
                 tg.fillColumn(world, r, cx * 16 + x, cz * 16 + z, x, z, result);
             }
