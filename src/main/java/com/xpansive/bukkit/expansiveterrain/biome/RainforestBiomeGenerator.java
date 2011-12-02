@@ -5,7 +5,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.Config;
+import com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain;
 import com.xpansive.bukkit.expansiveterrain.populator.*;
 import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.RainforestTerrainGenerator;
@@ -17,7 +17,7 @@ public class RainforestBiomeGenerator implements BiomeGenerator {
     private final TerrainGenerator terrainGen = new RainforestTerrainGenerator();
 
     public RainforestBiomeGenerator(World world) {
-        FileConfiguration config = Config.getConfig(world.getWorldFolder().getName());
+        FileConfiguration config = ExpansiveTerrain.getConfigManager().getConfig(world.getWorldFolder().getName());
         TreePopulator tree = new TreePopulator(
                 new Tree[] {
                         new Tree(

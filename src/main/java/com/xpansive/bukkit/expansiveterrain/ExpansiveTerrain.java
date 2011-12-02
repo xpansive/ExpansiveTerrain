@@ -12,15 +12,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExpansiveTerrain extends JavaPlugin {
     private final String WORLD_NAME = "ExpansiveTerrain";
     private World genWorld = null;
+    private static ConfigManager config;
+    
+    static {
+        config = new ConfigManager();
+    }
 
     public void onDisable() {
     }
 
     public void onEnable() {
         PluginDescriptionFile desc = this.getDescription();
-
         System.out.println(desc.getName() + " version " + desc.getVersion() + " is enabled!");
-
         getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec(this));
     }
 
@@ -41,10 +44,14 @@ public class ExpansiveTerrain extends JavaPlugin {
         }
         return genWorld;
     }
+    
+    public static ConfigManager getConfigManager() {
+        return config;
+    }
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
-        Config.loadConfig(this, worldName);
+        config.loadConfig(this, worldName);
         return new ExpansiveTerrainChunkGenerator();
     }
 }

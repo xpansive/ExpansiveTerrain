@@ -7,12 +7,12 @@ import java.util.HashMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config {
+public class ConfigManager {
 
-    private final static String CONFIG_NAME = "expansiveconfig.yml";
-    private static HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
+    private final String CONFIG_NAME = "expansiveconfig.yml";
+    private HashMap<String, FileConfiguration> configs = new HashMap<String, FileConfiguration>();
 
-    public static void loadConfig(ExpansiveTerrain plugin, String worldName) {
+    public void loadConfig(ExpansiveTerrain plugin, String worldName) {
         File configFile = new File(worldName, CONFIG_NAME);
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
@@ -29,7 +29,7 @@ public class Config {
         configs.put(worldName, config);
     }
 
-    public static FileConfiguration getConfig(String worldName) {
+    public FileConfiguration getConfig(String worldName) {
         return configs.get(worldName);
     }
 }
