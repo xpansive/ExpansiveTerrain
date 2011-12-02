@@ -8,35 +8,55 @@ import org.bukkit.block.Block;
 
 public class PalmTreeGenerator implements TreeGenerator {
 
+    private int minHeight, maxHeight;
+
+    public PalmTreeGenerator(int minHeight, int maxHeight) {
+        this.minHeight = minHeight;
+        this.maxHeight = maxHeight;
+    }
+
     public boolean generate(World world, Random rand, int x, int y, int z) {
 
-        // These trees must be planted on sand
+        // These trees must be planted on grass
         if (world.getBlockTypeIdAt(x, y - 1, z) != Material.GRASS.getId())
             return false;
 
-        int height = 8;
-        int numLeaves = 6;
-        int numLeafSteps = 5;
+        int height = rand.nextInt(maxHeight - minHeight + 1) + minHeight;
+        int numLeaves = (int) (height / 1.5);
+        int numLeafSteps = height / 2;
 
+        // Do some simple bounds checking
+        if (world.getBlockTypeIdAt(x, y, z) != 0 || // The base block
+                world.getBlockTypeIdAt(x, y + height, z) != 0 || // The top stem block
+                world.getBlockTypeIdAt(x + numLeafSteps, y + height, z) != 0 || // The max possible x
+                world.getBlockTypeIdAt(x - numLeafSteps, y + height, z) != 0 || // The min possible x
+                world.getBlockTypeIdAt(x, y + height, z + numLeafSteps) != 0 || // The max possible z
+                world.getBlockTypeIdAt(x, y + height, z - numLeafSteps) != 0) // The min possible z
+            return false;
+
+        // Place the trunk
         for (int cy = 0; cy < height; cy++) {
             Block b = world.getBlockAt(x, y + cy, z);
-            b.setType(Material.LOG);
-            b.setData((byte) (cy % 2)); // Alternate between pine and regular logs
+            if (b.getTypeId() == 0)
+                b.setTypeIdAndData(Material.LOG.getId(), (byte) (cy % 2), false); // Alternate between pine and regular logs
         }
 
         for (int i = 0; i < numLeaves; i++) {
             double cx = 0;
             double cz = 0;
 
-            // Determine the direction
+            // Determine the direction of the leaf
             double xStep = Math.sin(i + rand.nextDouble()) * 0.75;
             double zStep = Math.cos(i + rand.nextDouble()) * 0.75;
 
             for (int j = 0; j < numLeafSteps; j++) {
+                // Move the position
                 cx += xStep;
                 cz += zStep;
-                Block b = world.getBlockAt(x + (int) cx, y + height - j / 2, z + (int) cz);
-                b.setType(Material.LEAVES);
+                // Place the leaves
+                Block b = world.getBlockAt(x + (int) cx, y + height - j / (numLeafSteps / 3), z + (int) cz);
+                if (b.getTypeId() == 0)
+                    b.setType(Material.LEAVES);
             }
         }
 

@@ -17,10 +17,13 @@ public class DesertBiomeGenerator extends BiomeGenerator {
             new TreePopulator(
                     new Tree[] {
                             new Tree(
-                                    new PalmTreeGenerator(),
-                                    100,
-                                    1,
-                                    1)
+                                    new PalmTreeGenerator(
+                                            8, // Min height
+                                            12 // Max height
+                                            ),
+                                    100, // Chance per chunk
+                                    1, // Min per chunk
+                                    2) // Max per chunk
                     },
                     1
              )
