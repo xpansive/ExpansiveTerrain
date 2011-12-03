@@ -10,15 +10,19 @@ import org.bukkit.generator.BlockPopulator;
 
 public class WildGrassPopulator extends BlockPopulator {
 
-    private int minSteps, maxSteps;
+    private int minSteps, maxSteps, chance;
 
-    public WildGrassPopulator(int minSteps, int maxSteps) {
+    public WildGrassPopulator(int minSteps, int maxSteps, int chance) {
         this.minSteps = minSteps;
         this.maxSteps = maxSteps;
+        this.chance = chance;
     }
 
     @Override
     public void populate(World world, Random random, Chunk source) {
+        if (random.nextInt(100) > chance)
+            return;
+
         int x = (source.getX() << 4);
         int z = (source.getZ() << 4);
         int y = world.getHighestBlockYAt(x, z);

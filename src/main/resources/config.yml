@@ -45,3 +45,7 @@ biome:
       chanceper1000: 10
       maxnum: 20
       radius: 5
+    wildgrass:
+      minsteps: 10
+      maxsteps: 60
+      chance: 100

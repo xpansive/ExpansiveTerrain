@@ -53,8 +53,13 @@ public class RainforestBiomeGenerator implements BiomeGenerator {
                 config.getInt("biome.rainforest.pumpkin.maxnum"),
                 config.getInt("biome.rainforest.pumpkin.radius"));
 
+        WildGrassPopulator wildGrass = new WildGrassPopulator(
+                config.getInt("biome.rainforest.wildgrass.minsteps"),
+                config.getInt("biome.rainforest.wildgrass.maxsteps"),
+                config.getInt("biome.rainforest.wildgrass.chance"));
+
         populators = new BlockPopulator[] {
-                tree, flower, melon, pumpkin
+                tree, flower, melon, pumpkin, wildGrass
         };
     }
 
