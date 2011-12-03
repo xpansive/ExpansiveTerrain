@@ -22,6 +22,9 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
             noise = new SimplexNoiseGenerator(random);
             initalized = true;
         }
+        
+        double dirtHeight = noise.noise(worldX / 40.0, worldZ / 40.0) * 4 + 5;
+        int bedrock = (int)Math.ceil(noise.noise(worldX / 60.0, worldZ / 60.0) * 3 + 3);
 
         double height = 50;
         height += noise.noise(worldX / 200.0, worldZ / 200.0) * 12; // Gentle hills
@@ -34,8 +37,12 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
         for (int y = 0; y <= height; y++) {
             if (y == height) {
                 setBlock(chunkData, x, y, z, Material.GRASS);
-            } else {
+            } else if (y < bedrock) {
+                setBlock(chunkData, x, y, z, Material.BEDROCK);
+            } else if (y > height - dirtHeight) {
                 setBlock(chunkData, x, y, z, Material.DIRT);
+            } else {
+                setBlock(chunkData, x, y, z, Material.STONE);
             }
         }
     }
