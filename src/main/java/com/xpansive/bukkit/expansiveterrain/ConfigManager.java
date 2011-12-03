@@ -15,17 +15,29 @@ public class ConfigManager {
     public void loadConfig(ExpansiveTerrain plugin, String worldName) {
         File configFile = new File(worldName, CONFIG_NAME);
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        InputStream defConfigStream = plugin.getResource("config.yml");
 
         if (!configFile.exists()) {
-            InputStream defConfigStream = plugin.getResource("config.yml");
             try {
                 config.load(defConfigStream);
                 config.save(configFile);
             } catch (Exception e) {
                 System.out.println("ExpansiveTerrain: Unable to create config file for world " + worldName);
+                System.out.println("This is bad! Tell a dev!");
+                return;
+            }
+        } else {
+            FileConfiguration defaults = YamlConfiguration.loadConfiguration(defConfigStream);
+            config.setDefaults(defaults);
+            try {
+                config.load(configFile);
+            } catch (Exception e) {
+                System.out.println("ExpansiveTerrain: Unable to load config file for world " + worldName);
+                System.out.println("Is it malformed?");
                 return;
             }
         }
+
         configs.put(worldName, config);
     }
 

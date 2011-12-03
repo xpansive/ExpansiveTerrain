@@ -12,11 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExpansiveTerrain extends JavaPlugin {
     private final String WORLD_NAME = "ExpansiveTerrain";
     private World genWorld = null;
-    private static ConfigManager config;
-    
-    static {
-        config = new ConfigManager();
-    }
+    private static ConfigManager config = new ConfigManager();
 
     public void onDisable() {
     }
