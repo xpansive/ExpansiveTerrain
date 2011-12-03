@@ -16,14 +16,19 @@ import com.xpansive.bukkit.expansiveterrain.populator.TerrainPopulator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
 public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
-    private boolean initialized = false;
+    private ConfigManager config;
+    private boolean doneInit = false;
     private BiomeGeneratorFactory biomeGenerator;
+
+    public ExpansiveTerrainChunkGenerator(ConfigManager config) {
+        this.config = config;
+    }
 
     @Override
     public byte[] generate(World world, Random r, int cx, int cz) {
-        if (!initialized) {
-            biomeGenerator = new BiomeGeneratorFactory(world);
-            initialized = true;
+        if (!doneInit) {
+            biomeGenerator = new BiomeGeneratorFactory(config.getConfig(world.getWorldFolder().getName()));
+            doneInit = true;
         }
 
         byte[] result = new byte[32768];
@@ -47,7 +52,7 @@ public class ExpansiveTerrainChunkGenerator extends ChunkGenerator {
 
     @Override
     public List<BlockPopulator> getDefaultPopulators(World world) {
-        return Arrays.asList((BlockPopulator) new TerrainPopulator());
+        return Arrays.asList((BlockPopulator) new TerrainPopulator(config.getConfig(world.getWorldFolder().getName())));
     }
 
     @Override

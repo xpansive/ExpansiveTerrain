@@ -1,10 +1,8 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain;
 import com.xpansive.bukkit.expansiveterrain.populator.*;
 import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.*;
@@ -13,8 +11,7 @@ public class DesertBiomeGenerator implements BiomeGenerator {
     private final BlockPopulator[] populators;
     private final TerrainGenerator terrainGen = new DesertTerrainGenerator();
 
-    public DesertBiomeGenerator(World world) {
-        FileConfiguration config = ExpansiveTerrain.getConfigManager().getConfig(world.getWorldFolder().getName());
+    public DesertBiomeGenerator(FileConfiguration config) {
         CactusPopulator cactus = new CactusPopulator(
                 config.getInt("biome.desert.cactus.minheight"),
                 config.getInt("biome.desert.cactus.maxheight"),

@@ -1,23 +1,19 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.BlockPopulator;
 
-import com.xpansive.bukkit.expansiveterrain.ExpansiveTerrain;
 import com.xpansive.bukkit.expansiveterrain.populator.*;
 import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
 import com.xpansive.bukkit.expansiveterrain.terrain.RainforestTerrainGenerator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
 public class RainforestBiomeGenerator implements BiomeGenerator {
-
     private final BlockPopulator[] populators;
     private final TerrainGenerator terrainGen = new RainforestTerrainGenerator();
 
-    public RainforestBiomeGenerator(World world) {
-        FileConfiguration config = ExpansiveTerrain.getConfigManager().getConfig(world.getWorldFolder().getName());
+    public RainforestBiomeGenerator(FileConfiguration config) {
         TreePopulator tree = new TreePopulator(
                 new Tree[] {
                         new Tree(
