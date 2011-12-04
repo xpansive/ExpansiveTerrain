@@ -4,8 +4,6 @@ import java.util.Random;
 
 import org.bukkit.World;
 
-public interface StructureGenerator {
-
-    public boolean generate(World world, Random rand, int x, int y, int z);
-
+public abstract class StructureGenerator {
+    public abstract boolean generate(World world, Random rand, int x, int y, int z);
 }

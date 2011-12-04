@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-public class PalmTreeGenerator implements TreeGenerator {
+public class PalmTreeGenerator extends TreeGenerator {
 
     private int minHeight, maxHeight;
 

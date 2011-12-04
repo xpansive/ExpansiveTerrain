@@ -8,7 +8,7 @@ import org.bukkit.craftbukkit.CraftWorld;
 
 import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
-public class FlatTopTreeGenerator implements TreeGenerator {
+public class FlatTopTreeGenerator extends TreeGenerator {
 
     private int minHeight, maxHeight, minRadius, maxRadius, vineChance;
 

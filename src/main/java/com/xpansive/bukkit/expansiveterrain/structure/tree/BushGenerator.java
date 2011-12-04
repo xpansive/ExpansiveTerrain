@@ -8,7 +8,7 @@ import org.bukkit.craftbukkit.CraftWorld;
 
 import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
-public class BushGenerator implements TreeGenerator {
+public class BushGenerator extends TreeGenerator {
 
     private int minSize, maxSize, logChance;
 
