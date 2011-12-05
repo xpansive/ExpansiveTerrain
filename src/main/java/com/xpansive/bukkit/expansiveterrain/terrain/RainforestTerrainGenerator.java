@@ -12,7 +12,6 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
 
     private SimplexNoiseGenerator noise;
     private boolean initalized = false;
-
     private LargeStructureGenerator[] structures;
 
     @Override
@@ -24,12 +23,14 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
     public void fillColumn(World world, Random random, int worldX, int worldZ, int x, int z, byte[] chunkData) {
         if (!initalized) {
             noise = new SimplexNoiseGenerator(random);
-            structures = new LargeStructureGenerator[] { new CaveGenerator(random, 0.5, 60, 2) };
+            structures = new LargeStructureGenerator[] {
+                    new CaveGenerator(random, 0.5, 60, 2),
+                    new BedrockGenerator(random, 0, 4)
+            };
             initalized = true;
         }
 
         double dirtHeight = noise.noise(worldX / 40.0, worldZ / 40.0) * 4 + 5;
-        int bedrock = (int) Math.ceil(noise.noise(worldX / 60.0, worldZ / 60.0) * 3 + 3);
 
         double height = 60;
         height += noise.noise(worldX / 200.0, worldZ / 200.0) * 12; // Gentle hills
@@ -42,8 +43,6 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
         for (int y = 0; y <= height; y++) {
             if (y == height) {
                 setBlock(chunkData, x, y, z, Material.GRASS);
-            } else if (y < bedrock) {
-                setBlock(chunkData, x, y, z, Material.BEDROCK);
             } else if (y > height - dirtHeight) {
                 setBlock(chunkData, x, y, z, Material.DIRT);
             } else {

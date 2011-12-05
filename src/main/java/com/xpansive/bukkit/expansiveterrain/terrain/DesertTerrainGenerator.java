@@ -6,14 +6,23 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.noise.*;
 
+import com.xpansive.bukkit.expansiveterrain.structure.BedrockGenerator;
+import com.xpansive.bukkit.expansiveterrain.structure.CaveGenerator;
+import com.xpansive.bukkit.expansiveterrain.structure.LargeStructureGenerator;
+
 public class DesertTerrainGenerator extends TerrainGenerator {
     private boolean initalized = false;
     private NoiseGenerator noise;
+    private LargeStructureGenerator[] structures;
 
     @Override
     public void fillColumn(World world, Random random, int worldX, int worldZ, int x, int z, byte[] chunkData) {
         if (!initalized) {
             noise = new SimplexNoiseGenerator(random);
+            structures = new LargeStructureGenerator[] {
+                    new CaveGenerator(random, 0.5, 60, 2),
+                    new BedrockGenerator(random, 0, 4)
+            };
             initalized = true;
         }
         
@@ -40,6 +49,11 @@ public class DesertTerrainGenerator extends TerrainGenerator {
             } else if (y < height) {
                 setBlock(chunkData, x, y, z, Material.SANDSTONE);
             }
+        }
+
+        // Fill in large structures such as caves
+        for (LargeStructureGenerator structure : structures) {
+            structure.fillColumn(world, random, worldX, worldZ, x, z, chunkData);
         }
     }
 
