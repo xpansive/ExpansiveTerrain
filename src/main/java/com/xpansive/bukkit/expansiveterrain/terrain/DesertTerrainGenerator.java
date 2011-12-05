@@ -56,11 +56,4 @@ public class DesertTerrainGenerator extends TerrainGenerator {
             structure.fillColumn(world, random, worldX, worldZ, x, z, chunkData);
         }
     }
-
-    @Override
-    public double getHeightMultiplier() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
 }

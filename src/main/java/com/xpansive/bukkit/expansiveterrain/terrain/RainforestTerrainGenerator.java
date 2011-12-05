@@ -15,11 +15,6 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
     private LargeStructureGenerator[] structures;
 
     @Override
-    public double getHeightMultiplier() {
-        return 1;
-    }
-
-    @Override
     public void fillColumn(World world, Random random, int worldX, int worldZ, int x, int z, byte[] chunkData) {
         if (!initalized) {
             noise = new SimplexNoiseGenerator(random);
