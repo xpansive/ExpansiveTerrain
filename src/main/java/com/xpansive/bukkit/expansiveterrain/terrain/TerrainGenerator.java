@@ -10,7 +10,7 @@ public abstract class TerrainGenerator {
     
     public abstract double getHeightMultiplier();
     
-    public static void setBlock(byte[] data, int x, int y, int z, Material type) {
+    protected void setBlock(byte[] data, int x, int y, int z, Material type) {
         data[(x * 16 + z) * 128 + y] = (byte) type.getId();
     }
 }
