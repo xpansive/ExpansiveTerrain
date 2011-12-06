@@ -28,6 +28,8 @@ public class DesertTerrainGenerator extends TerrainGenerator {
         
         int seaLevel = 55;
         
+        double sandHeight = noise.noise(worldX / 40.0, worldZ / 40.0) * 4 + 5;
+
         double height = (1 - Math.abs(noise.noise(worldX / 125.0, worldZ / 125.0))) * 18; // Ridges/dunes
         height *= Math.min(1, noise.noise(worldX / 250.0, worldZ / 250.0) + 1); // To make the dunes fade in and out
         height += noise.noise(worldX / 400.0, worldZ / 400.0) * 20 + 15; // Gradual slope
@@ -37,7 +39,7 @@ public class DesertTerrainGenerator extends TerrainGenerator {
         height = Math.floor(height);
         
         for (int y = 0; y <= Math.max(height, seaLevel); y++) {
-            if (y == height) {
+            if (y > height - sandHeight && y <= height) {
                 if (y >= seaLevel && y <= seaLevel + 1)
                     setBlock(chunkData, x, y, z, Material.GRASS);
                 else if (y < seaLevel)
@@ -46,8 +48,11 @@ public class DesertTerrainGenerator extends TerrainGenerator {
                     setBlock(chunkData, x, y, z, Material.SAND);
             } else if (y <= seaLevel && y > height) {
                 setBlock(chunkData, x, y, z, Material.STATIONARY_WATER);
-            } else if (y < height) {
-                setBlock(chunkData, x, y, z, Material.SANDSTONE);
+            } else if (y < height - sandHeight) {
+                if (noise.noise(worldX / 65.0, y / 65.0, worldZ / 65.0) > 0)
+                    setBlock(chunkData, x, y, z, Material.SANDSTONE);
+                else
+                    setBlock(chunkData, x, y, z, Material.STONE);
             }
         }
 
