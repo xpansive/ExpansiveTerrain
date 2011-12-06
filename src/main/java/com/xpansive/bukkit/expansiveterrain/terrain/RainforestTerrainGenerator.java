@@ -27,10 +27,14 @@ public class RainforestTerrainGenerator extends TerrainGenerator {
 
         double dirtHeight = noise.noise(worldX / 40.0, worldZ / 40.0) * 4 + 5;
 
-        double height = 60;
-        height += noise.noise(worldX / 200.0, worldZ / 200.0) * 12; // Gentle hills
+        
+        double height = noise.noise(worldX / 200.0, worldZ / 200.0) * 12; // Gentle hills
         height += noise.noise(worldX / 50.0, worldZ / 50.0) * 4; // Small turbulence
         height += Math.pow(1.1125, noise.noise(worldX / 200.0, worldZ / 200.0) * 39); // Exponential mountains
+        height += 7;
+        
+        height *= calculateHeightInfluence(world, worldX, worldZ);
+        height += 60;
 
         height = Math.min(height, world.getMaxHeight() - 1);
         height = Math.floor(height);

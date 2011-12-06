@@ -26,14 +26,17 @@ public class DesertTerrainGenerator extends TerrainGenerator {
             initalized = true;
         }
         
-        int seaLevel = 55;
+        int seaLevel = 40;
         
         double sandHeight = noise.noise(worldX / 40.0, worldZ / 40.0) * 4 + 5;
 
         double height = (1 - Math.abs(noise.noise(worldX / 125.0, worldZ / 125.0))) * 18; // Ridges/dunes
         height *= Math.min(1, noise.noise(worldX / 250.0, worldZ / 250.0) + 1); // To make the dunes fade in and out
         height += noise.noise(worldX / 400.0, worldZ / 400.0) * 20 + 15; // Gradual slope
-        height += seaLevel;
+        height -= 20;
+        
+        height *= calculateHeightInfluence(world, worldX, worldZ);
+        height += 60;
         
         height = Math.min(height, world.getMaxHeight() - 1);
         height = Math.floor(height);
