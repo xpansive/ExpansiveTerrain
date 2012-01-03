@@ -22,3 +22,6 @@
 *.ipr
 *.iws
 .idea/
+
+# my compile/run server script
+compile.sh
