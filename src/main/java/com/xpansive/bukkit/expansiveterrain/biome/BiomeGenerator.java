@@ -1,11 +1,19 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
-import org.bukkit.generator.BlockPopulator;
-
+import com.xpansive.bukkit.expansiveterrain.GeneratorBase;
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.populator.ExpansiveTerrainPopulator;
 import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
-public interface BiomeGenerator {
-    public BlockPopulator[] getPopulators();
+public abstract class BiomeGenerator extends GeneratorBase {
+    
+    protected BiomeGenerator(WorldState state) {
+        super(state);
+    }
 
-    public TerrainGenerator getTerrainGenerator();
+    public abstract ExpansiveTerrainPopulator[] getPopulators();
+
+    public abstract TerrainGenerator getTerrainGenerator();
+    
+    public abstract boolean canSpawn(int x, int y, int z);
 }

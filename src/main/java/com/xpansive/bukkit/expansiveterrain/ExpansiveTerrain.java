@@ -10,7 +10,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExpansiveTerrain extends JavaPlugin {
-    private final String WORLD_NAME = "ExpansiveTerrain";
+    private static final String DEFAULT_WORLD_NAME = "ExpansiveTerrain";
     private World genWorld = null;
     private ConfigManager config = new ConfigManager();
 
@@ -19,7 +19,7 @@ public class ExpansiveTerrain extends JavaPlugin {
 
     public void onEnable() {
         PluginDescriptionFile desc = this.getDescription();
-        System.out.println(desc.getName() + " version " + desc.getVersion() + " is enabled!");
+        getServer().getLogger().info(desc.getName() + " version " + desc.getVersion() + " is enabled!");
         getCommand("expansive").setExecutor(new ExpansiveTerrainCommandExec(this));
     }
 
@@ -30,21 +30,21 @@ public class ExpansiveTerrain extends JavaPlugin {
     public World getExpansiveTerrainWorld() {
         // Thanks to echurchill on github for pointing this out
         if (genWorld == null) {
-            genWorld = Bukkit.getServer().getWorld(WORLD_NAME);
+            genWorld = Bukkit.getServer().getWorld(DEFAULT_WORLD_NAME);
             if (genWorld == null) {
-                WorldCreator worldcreator = new WorldCreator(WORLD_NAME);
+                WorldCreator worldcreator = new WorldCreator(DEFAULT_WORLD_NAME);
                 worldcreator.environment(World.Environment.NORMAL);
-                config.loadConfig(this, WORLD_NAME);
-                worldcreator.generator(new ExpansiveTerrainChunkGenerator(config));
+                worldcreator.generator(getDefaultWorldGenerator(DEFAULT_WORLD_NAME, ""));
                 genWorld = Bukkit.getServer().createWorld(worldcreator);
             }
         }
+
         return genWorld;
     }
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
         config.loadConfig(this, worldName);
-        return new ExpansiveTerrainChunkGenerator(config);
+        return new ExpansiveTerrainChunkGenerator(config, this);
     }
 }

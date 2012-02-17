@@ -1,11 +1,27 @@
+# Config file for ExpansiveTerrain.
+#
+# How to determine what a field controls:
+#
+#   world - Generic things that are the same across the world.
+#   biome - Settings for certain biomes.
+#   
+#   num/maxnum - Generally the maximum number of something in a certain patch. This is usually less because of other
+#     random factors that lead to some not being placed.
+#   chance - Usually the percent chance (from 0 - 1) of something appearing in a certain chunk (16 * 16 blocks) unless
+#     otherwise specified.
+#   things that take block types - Put these as they are represented in Bukkit's Material.java 
+
+world:
+  maxspawndist: 1000 # Max spawn distance, you probably don't need to change this at all
+  sealevel: 55
+  bedrock:
+    scale: 0.015 # Scale of perlin noise
+    minheight: 0
+    maxheight: 4
+
+
 biome:
   desert:
-    cactus:
-      minheight: 1
-      maxheight: 6
-      patchradius: 5
-      patchchance: 4
-      newcactuschance: 80
     tree:
       treetypesperchunk: 1
       palmtree:
@@ -14,38 +30,116 @@ biome:
         chanceperchunk: 100
         minperchunk: 1
         maxperchunk: 2
+
+    cactus:
+      minheight: 1
+      maxheight: 6
+      radius: 5 # Clump radius
+      chance: 0.04
+      newchance: 0.85 # Chance of cacti reproducing
+
+
   rainforest:
     tree:
       treetypesperchunk: 1
-      bush:
-        minradius: 1
-        maxradius: 4
-        logchance: 75
-        chanceperchunk: 20
-        minperchunk: 1
-        maxperchunk: 1
       flattoptree:
         minheight: 12
         maxheight: 20
-        minradius: 8
+        minradius: 8 # Leaf radius
         maxradius: 12
-        vinechance: 20
-        chanceperchunk: 5
-        minperchunk: 1
-        maxperchunk: 1
+        vinechance: 0.2
+        minbranchheight: 1
+        maxbranchheight: 4
+        chance: 0.1
+      bush:
+        minradius: 1
+        maxradius: 4
+        logchance: 0.25
+        chance: 1.0
+
     flower:
-      flowerpatchchance: 10
-      flowerchance: 95
-      flowernum: 20
+      patchchance: 0.2 # Chance per chunk
+      chance: 0.95 # Individual flower chance
+      num: 30
+      types:
+        - YELLOW_FLOWER
+        - RED_ROSE
+
     melon:
-      chanceper1000: 7
-      maxnum: 15
-      radius: 5
+      chance: 0.007
+      maxnum: 7 # Max number you can find in one place
+      radius: 5 # Clump radius
+
     pumpkin:
-      chanceper1000: 10
-      maxnum: 20
-      radius: 5
+      chance: 0.01
+      maxnum: 10 # Max number you can find in one place
+      radius: 5 # Clump radius
+
     wildgrass:
-      minsteps: 10
-      maxsteps: 60
-      chance: 100
+      minsteps: 10 # Min number in a clump
+      maxsteps: 60 # Max number in a clump
+      chance: 0.95
+
+    ore:
+      # Change these if you don't like the number of ores
+      maxdeposits: 40 # Per chunk
+      mindeposits: 10 # Per chunk
+      changeableblocks: # Blocks that can be replaced with ores
+        - STONE
+        - DIRT
+
+      # Everything in this next section corresponds to the ores list.
+      # So if the first thing in the ores list is diamond, then the first thing in maxdepositsize is for diamond.
+      # Same goes for 2nd, 3rd, 4th, n...
+      # I played around with these values for a long time to get them just right, so good luck if you're planning on changing them.
+      # Modifying one value can affect all the other ores too because the ratios are different.
+      ores:
+        - DIAMOND_ORE
+        - COAL_ORE
+        - IRON_ORE
+        - REDSTONE_ORE
+        - GOLD_ORE
+        - LAPIS_ORE
+      maxdepositsize:
+        - 10
+        - 20
+        - 10
+        - 25
+        - 35
+        - 25
+      mindepositsize:
+        - 2
+        - 5
+        - 5
+        - 15
+        - 17
+        - 17
+      chance:
+        - 0.1
+        - 0.6
+        - 0.2
+        - 0.13
+        - 0.025
+        - 0.03
+      maxlevel:
+        - 20
+        - 128
+        - 64
+        - 20
+        - 30
+        - 25
+
+    cave:
+    # This is undocumented for a _good_reason_, it's very complex.
+    # If you really want to know what it means, send me a pm or look at the source
+      numlayers: 3
+      density: 0.8
+      levelscale: 300.0
+      widthscale: 95.0
+      widthmul: 0.4
+      widthadd: 0.45
+      cavescale: 110.0
+      densityscale: 170.0
+      heightscale: 90.0
+      heightmul: 11.0
+      heightadd: 14.0

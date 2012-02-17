@@ -6,17 +6,20 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+
 public class PalmTreeGenerator extends TreeGenerator {
 
     private int minHeight, maxHeight;
 
-    public PalmTreeGenerator(int minHeight, int maxHeight) {
+    public PalmTreeGenerator(WorldState state, int minHeight, int maxHeight) {
+        super(state);
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
     }
 
-    public boolean generate(World world, Random rand, int x, int y, int z) {
-
+    public boolean generate(int x, int y, int z) {
+        return false;/*
         // These trees must be planted on grass
         if (world.getBlockTypeIdAt(x, y - 1, z) != Material.GRASS.getId())
             return false;
@@ -60,6 +63,6 @@ public class PalmTreeGenerator extends TreeGenerator {
             }
         }
 
-        return true;
+        return true;*/
     }
 }

@@ -1,24 +1,22 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.Material;
 
-import com.xpansive.bukkit.expansiveterrain.populator.*;
-import com.xpansive.bukkit.expansiveterrain.structure.tree.*;
-import com.xpansive.bukkit.expansiveterrain.terrain.*;
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.populator.CactusPopulator;
+import com.xpansive.bukkit.expansiveterrain.populator.ExpansiveTerrainPopulator;
+import com.xpansive.bukkit.expansiveterrain.terrain.DesertTerrainGenerator;
+import com.xpansive.bukkit.expansiveterrain.terrain.TerrainGenerator;
 
-public class DesertBiomeGenerator implements BiomeGenerator {
-    private final BlockPopulator[] populators;
-    private final TerrainGenerator terrainGen = new DesertTerrainGenerator();
+public class DesertBiomeGenerator extends BiomeGenerator {
+    private final ExpansiveTerrainPopulator[] populators;
+    private final TerrainGenerator terrainGen;
 
-    public DesertBiomeGenerator(FileConfiguration config) {
-        CactusPopulator cactus = new CactusPopulator(
-                config.getInt("biome.desert.cactus.minheight"),
-                config.getInt("biome.desert.cactus.maxheight"),
-                config.getInt("biome.desert.cactus.patchradius"),
-                config.getInt("biome.desert.cactus.patchchance"),
-                config.getInt("biome.desert.cactus.newcactuschance"));
-        TreePopulator tree = new TreePopulator(
+    public DesertBiomeGenerator(WorldState state) {
+        super(state);
+        terrainGen = new DesertTerrainGenerator(state);
+        CactusPopulator cactus = new CactusPopulator(state, "biome.desert.cactus.");
+        /*TreePopulator tree = new TreePopulator(
                 new Tree[] {
                         new Tree(
                                 new PalmTreeGenerator(
@@ -28,18 +26,20 @@ public class DesertBiomeGenerator implements BiomeGenerator {
                                 config.getInt("biome.desert.tree.palmtree.minperchunk"),
                                 config.getInt("biome.desert.tree.palmtree.maxperchunk"))
                 },
-                config.getInt("biome.desert.tree.treetypesperchunk"));
+                config.getInt("biome.desert.tree.treetypesperchunk"));*/
 
-        populators = new BlockPopulator[] {
-                cactus, tree
-        };
+        populators = new ExpansiveTerrainPopulator[] { cactus };
     }
 
-    public BlockPopulator[] getPopulators() {
+    public ExpansiveTerrainPopulator[] getPopulators() {
         return populators;
     }
 
     public TerrainGenerator getTerrainGenerator() {
         return terrainGen;
+    }
+    
+    public boolean canSpawn(int x, int y, int z) {
+        return state.getDirectWorld().getMaterial(x, y, z) == Material.SAND;
     }
 }

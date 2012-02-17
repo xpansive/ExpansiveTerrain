@@ -1,32 +1,23 @@
 package com.xpansive.bukkit.expansiveterrain.structure.tree;
 
+import com.xpansive.bukkit.expansiveterrain.WorldState;
 import com.xpansive.bukkit.expansiveterrain.structure.tree.TreeGenerator;
 
 public class Tree {
     
     private TreeGenerator generator;
-    private int treeChance, minPerChunk, maxPerChunk;
+    private double treeChance;
     
-    public Tree(TreeGenerator generator, int treeChance, int minPerChunk, int maxPerChunk) {
+    public Tree(WorldState state, TreeGenerator generator, String path) {
         this.generator = generator;
-        this.treeChance = treeChance;
-        this.minPerChunk = minPerChunk;
-        this.maxPerChunk = maxPerChunk;
+        treeChance = state.getConfig().getDouble(path + "chance");
     }
     
     public TreeGenerator getGenerator() {
         return generator;
     }
     
-    public int getTreeChance() {
+    public double getTreeChance() {
         return treeChance;
-    }
-    
-    public int getMinPerChunk() {
-        return minPerChunk;
-    }
-    
-    public int getMaxPerChunk() {
-        return maxPerChunk;
     }
 }

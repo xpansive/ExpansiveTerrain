@@ -1,41 +1,45 @@
 package com.xpansive.bukkit.expansiveterrain.populator;
 
-import java.util.Random;
-
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class PumpkinPopulator extends BlockPopulator {
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.util.DirectWorld;
+import com.xpansive.bukkit.expansiveterrain.util.RandomExt;
 
-    int chancePer1000, numPumpkins, depositRadius;
+public class PumpkinPopulator extends ExpansiveTerrainPopulator {
 
-    public PumpkinPopulator(int chancePer1000, int numPumpkins, int depositRadius) {
-        this.chancePer1000 = chancePer1000;
-        this.numPumpkins = numPumpkins;
-        this.depositRadius = depositRadius;
+    private int numPumpkins, depositRadius;
+    private double chance;
+
+    public PumpkinPopulator(WorldState state, String path) {
+        super(state);
+        FileConfiguration config = state.getConfig();
+        chance = config.getDouble(path + "chance");
+        numPumpkins = config.getInt(path + "maxnum");
+        depositRadius = config.getInt(path + "radius");
     }
 
     @Override
-    public void populate(World world, Random random, Chunk source) {
-        // Check if we should place a pumpkin patch on this chunk
-        if (random.nextInt(1000) < chancePer1000) {
-            int x = (source.getX() << 4) + random.nextInt(16);
-            int z = (source.getZ() << 4) + random.nextInt(16);
-
-            for (int i = 0; i < random.nextInt(numPumpkins); i++) {
+    public void populate(int cx, int cz) {
+        RandomExt random = state.getRandomExt();
+        DirectWorld world = state.getDirectWorld();
+        
+        // Check if we should place a mumpkin patch on this chunk
+        if (random.percentChance(chance)) {
+            int x = cx + random.randInt(16);
+            int z = cz + random.randInt(16);
+            int num = random.randInt(numPumpkins);
+            
+            for (int i = 0; i < num; i++) {
                 // Pick a random spot within the radius
-                int cx = x + random.nextInt(depositRadius * 2) - depositRadius;
-                int cz = z + random.nextInt(depositRadius * 2) - depositRadius;
-                int y = world.getHighestBlockYAt(cx, cz);
+                int kx = x + random.randInt(-depositRadius, depositRadius);
+                int kz = z + random.randInt(-depositRadius, depositRadius);
+                int y = world.getHighestBlockY(kx, kz);
 
-                // If it's grass, place a pumpkin on top
-                if (world.getBlockAt(cx, y - 1, cz).getType() == Material.GRASS) {
-                    Block pumpkin = world.getBlockAt(cx, y, cz);
-                    pumpkin.setType(Material.PUMPKIN);
-                    pumpkin.setData((byte) random.nextInt(5));
+                // If it's grass, place a mumpkin on top
+                if (world.getMaterial(kx, y - 1, kz) == Material.GRASS) {
+                    world.setRawMaterial(kx, y, kz, Material.PUMPKIN);
                 }
             }
         }

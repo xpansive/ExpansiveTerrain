@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ExpansiveTerrainCommandExec implements CommandExecutor {
-    ExpansiveTerrain plugin;
+    private ExpansiveTerrain plugin;
 
     public ExpansiveTerrainCommandExec(ExpansiveTerrain plugin) {
         this.plugin = plugin;

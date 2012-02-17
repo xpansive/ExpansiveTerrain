@@ -1,65 +1,83 @@
 package com.xpansive.bukkit.expansiveterrain.populator;
 
-import java.util.Random;
-import org.bukkit.Chunk;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class OrePopulator extends BlockPopulator {
+import com.xpansive.bukkit.expansiveterrain.ConfigManager;
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.util.DirectWorld;
+import com.xpansive.bukkit.expansiveterrain.util.RandomExt;
 
-    private final int DEPOSITS_PER_CHUNK = 100; // this is the max, its usually
-                                                // less than this
+public class OrePopulator extends ExpansiveTerrainPopulator {
 
-    private final Material[] CHANGEABLE_BLOCKS = new Material[] { Material.STONE, Material.DIRT };
+    public OrePopulator(WorldState state, String path) {
+        super(state);
+        FileConfiguration config = state.getConfig();
+        minDeposits = config.getInt(path + "mindeposits");
+        maxDeposits = config.getInt(path + "maxdeposits");
+        changeableBlocks = Arrays.asList(ConfigManager.Util.readMaterialList(config, path + "changeableblocks"));
+        ores = ConfigManager.Util.readMaterialList(config, path + "ores");
+        maxDepositSize = ConfigManager.Util.readIntList(config, path + "maxdepositsize");
+        minDepositSize = ConfigManager.Util.readIntList(config, path + "mindepositsize");
+        maxLevels = ConfigManager.Util.readIntList(config, path + "maxlevel");
+        chances = ConfigManager.Util.readDoubleList(config, path + "chance");
+    }
 
-    private final Material[] ORES = new Material[] { Material.COAL_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.DIAMOND_ORE, Material.REDSTONE_ORE, Material.LAPIS_ORE };
-
-    private final int[] MAX_DEPOSIT_SIZE = new int[] { 4, /* Coal */3, /* Iron */3, /* Gold */
-    2, /* Diamond */3, /* Redstone */2, /* Lapis */
-    };
-
-    private final int[] MAX_LEVEL = new int[] { 128, /* Coal */35, /* Iron */20, /* Gold */
-    10, /* Diamond */15, /* Redstone */10, /* Lapis */
-    };
+    private int minDeposits, maxDeposits;
+    private Material[] ores;
+    private List<Material> changeableBlocks;
+    private int[] minDepositSize, maxDepositSize, maxLevels;
+    private double[] chances;
 
     @Override
-    public void populate(World world, Random random, Chunk source) {
-        for (int i = 0; i < DEPOSITS_PER_CHUNK; i++) {
-            int x = (source.getX() << 4) + random.nextInt(16);
-            int z = (source.getZ() << 4) + random.nextInt(16);
-            int highY = Math.max(128, world.getHighestBlockYAt(x, z));
-            int y = random.nextInt(highY);
+    public void populate(int chunkX, int chunkZ) {
+        RandomExt rand = state.getRandomExt();
 
-            int index = random.nextInt(ORES.length);
-            int xsize = random.nextInt(MAX_DEPOSIT_SIZE[index] + 1);
-            int ysize = random.nextInt(MAX_DEPOSIT_SIZE[index] + 1);
-            int zsize = random.nextInt(MAX_DEPOSIT_SIZE[index] + 1);
-            Material ore = ORES[index];
+        int numDeposits = rand.randInt(minDeposits, maxDeposits);
+        for (int i = 0; i < numDeposits; i++) {
+            int x = chunkX + rand.randInt(16);
+            int z = chunkZ + rand.randInt(16);
+            int y = rand.randInt(state.getDirectWorld().getHighestBlockY(x, z));
+            int index;
 
-            if (y > MAX_LEVEL[index])
-                continue;
+            do {
+                index = rand.randInt(ores.length);
+            } while (!rand.percentChance(chances[index]));
 
-            for (int cx = x; cx < x + xsize; cx++) {
-                for (int cy = y; cy < y + ysize; cy++) {
-                    for (int cz = z; cz < z + zsize; cz++) {
-                        Block type = world.getBlockAt(cx, cy, cz);
-                        boolean placeOre = false;
-                        for (Material mat : CHANGEABLE_BLOCKS)
-                            placeOre |= mat.getId() == type.getTypeId();
-
-                        if (!placeOre || random.nextDouble() > 0.5)
-                            continue;
-
-                        setBlock(world, cx, cy, cz, ore);
-                    }
-                }
+            if (!placeOre(index, x, y, z)) { // Don't count this if it failed
+                i--;
             }
         }
     }
 
-    private static void setBlock(World w, int x, int y, int z, Material m) {
-        w.getBlockAt(x, y, z).setType(m);
+    private boolean placeOre(int index, int x, int y, int z) {
+        RandomExt rand = state.getRandomExt();
+        DirectWorld world = state.getDirectWorld();
+
+        if (y > maxLevels[index]) {
+            return false;
+        }
+        Material ore = ores[index];
+        int length = rand.randInt(minDepositSize[index], maxDepositSize[index]);
+        int cx = 0, cz = 0, cy = 0;
+
+        for (int i = 0; i < length; i++) {
+            cx += rand.randInt(-1, 1);
+            cy += rand.randInt(-1, 1);
+            cz += rand.randInt(-1, 1);
+
+            if (changeableBlocks.contains(world.getMaterial(x + cx, y + cy, z + cz))) {
+                world.setRawMaterial(x + cx, y + cy, z + cz, ore);
+            } else {
+                if (i == 0) { // If the first one failed, don't bother trying the rest
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 }

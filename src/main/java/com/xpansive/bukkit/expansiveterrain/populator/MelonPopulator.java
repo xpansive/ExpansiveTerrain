@@ -1,38 +1,46 @@
 package com.xpansive.bukkit.expansiveterrain.populator;
 
-import java.util.Random;
-
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class MelonPopulator extends BlockPopulator {
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.util.DirectWorld;
+import com.xpansive.bukkit.expansiveterrain.util.RandomExt;
 
-    int chancePer1000, numMelons, depositRadius;
+public class MelonPopulator extends ExpansiveTerrainPopulator {
 
-    public MelonPopulator(int chancePer1000, int numMelons, int depositRadius) {
-        this.chancePer1000 = chancePer1000;
-        this.numMelons = numMelons;
-        this.depositRadius = depositRadius;
+    private int numMelons, depositRadius;
+    private double chance;
+
+    public MelonPopulator(WorldState state, String path) {
+        super(state);
+        FileConfiguration config = state.getConfig();
+        chance = config.getDouble(path + "chance");
+        numMelons = config.getInt(path + "maxnum");
+        depositRadius = config.getInt(path + "radius");
     }
 
     @Override
-    public void populate(World world, Random random, Chunk source) {
+    public void populate(int cx, int cz) {
+        RandomExt random = state.getRandomExt();
+        DirectWorld world = state.getDirectWorld();
+        
         // Check if we should place a melon patch on this chunk
-        if (random.nextInt(1000) < chancePer1000) {
-            int x = (source.getX() << 4) + random.nextInt(16);
-            int z = (source.getZ() << 4) + random.nextInt(16);
-
-            for (int i = 0; i < random.nextInt(numMelons); i++) {
+        if (random.percentChance(chance)) {
+            int x = cx + random.randInt(16);
+            int z = cz + random.randInt(16);
+            int num = random.randInt(numMelons);
+            
+            for (int i = 0; i < num; i++) {
                 // Pick a random spot within the radius
-                int cx = x + random.nextInt(depositRadius * 2) - depositRadius;
-                int cz = z + random.nextInt(depositRadius * 2) - depositRadius;
-                int y = world.getHighestBlockYAt(cx, cz);
+                int kx = x + random.randInt(-depositRadius, depositRadius);
+                int kz = z + random.randInt(-depositRadius, depositRadius);
+                int y = world.getHighestBlockY(kx, kz);
 
                 // If it's grass, place a melon on top
-                if (world.getBlockAt(cx, y - 1, cz).getType() == Material.GRASS)
-                    world.getBlockAt(cx, y, cz).setType(Material.MELON_BLOCK);
+                if (world.getMaterial(kx, y - 1, kz) == Material.GRASS) {
+                    world.setRawMaterial(kx, y, kz, Material.MELON_BLOCK);
+                }
             }
         }
     }

@@ -1,61 +1,58 @@
 package com.xpansive.bukkit.expansiveterrain.populator;
 
-import java.util.Random;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class CactusPopulator extends BlockPopulator {
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.util.DirectWorld;
+import com.xpansive.bukkit.expansiveterrain.util.RandomExt;
 
-    private int minHeight, maxHeight, cactusPatchRadius, cactusPatchChance,
-            newCactusChance;
+public class CactusPopulator extends ExpansiveTerrainPopulator {
 
-    public CactusPopulator(int minHeight, int maxHeight, int cactusPatchRadius,
-            int cactusPatchChance, int newCactusChance) {
-        this.minHeight = minHeight;
-        this.maxHeight = maxHeight;
-        this.cactusPatchRadius = cactusPatchRadius;
-        this.cactusPatchChance = cactusPatchChance;
-        this.newCactusChance = newCactusChance;
+    private int minHeight, maxHeight, radius;
+    private double chance, newChance;
+
+    public CactusPopulator(WorldState state, String path) {
+        super(state);
+        FileConfiguration config = state.getConfig();
+        minHeight = config.getInt(path + "minheight");
+        maxHeight = config.getInt(path + "maxheight");
+        radius = config.getInt(path + "radius");
+        chance = config.getDouble(path + "chance");
+        newChance = config.getDouble(path + "newchance");
     }
 
     @Override
-    public void populate(World world, Random random, Chunk source) {
-        // Determine if we should plant anything at all
-        boolean plantNewCactus = random.nextInt(100) < cactusPatchChance;
+    public void populate(int cx, int cz) {
+        RandomExt random = state.getRandomExt();
+        DirectWorld world = state.getDirectWorld();
 
-        int x = (source.getX() << 4) + random.nextInt(16);
-        int z = (source.getZ() << 4) + random.nextInt(16);
+        // Determine if we should plant anything at all
+        boolean plantNewCactus = random.percentChance(chance);
+        int x = cx + random.randInt(16);
+        int z = cz + random.randInt(16);
 
         while (plantNewCactus) {
             // Pick some random coordinates
-            x += random.nextInt(cactusPatchRadius * 2) - cactusPatchRadius;
-            z += random.nextInt(cactusPatchRadius * 2) - cactusPatchRadius;
+            x += random.randInt(-radius, radius);
+            z += random.randInt(-radius, radius);
 
-            int y = world.getHighestBlockYAt(x, z);
-            Block b = world.getBlockAt(x, y, z);
+            int y = world.getHighestBlockY(x, z);
 
             // Check if we're planting it on sand
-            if (b.getRelative(BlockFace.DOWN).getType() == Material.SAND) {
+            if (world.getMaterial(x, y - 1, z) == Material.SAND) {
                 // Determine the height of the cactus
-                int height = random.nextInt(maxHeight - minHeight + 1)
-                        + minHeight;
+                int height = random.randInt(minHeight, maxHeight);
 
                 for (int i = 0; i < height; i++) {
-                    // Cacti can only be planted if there are no blocks adjacent
-                    // to them
-                    if (b.getRelative(BlockFace.NORTH).getTypeId() == 0
-                            && b.getRelative(BlockFace.EAST).getTypeId() == 0
-                            && b.getRelative(BlockFace.SOUTH).getTypeId() == 0
-                            && b.getRelative(BlockFace.WEST).getTypeId() == 0)
-                        b.getRelative(0, i, 0).setType(Material.CACTUS);
+                    // Cacti can only be planted if there are no blocks adjacent to them
+                    if ((world.getTypeId(x + 1, y, z) | world.getTypeId(x - 1, y, z) | world.getTypeId(x, y, z + 1) | world.getTypeId(x, y, z - 1)) == 0) {
+                        world.setRawMaterial(x, y + i, z, Material.CACTUS);
+                    }
                 }
             }
             // Determine if we should continue, planting more cacti in this patch
-            plantNewCactus = random.nextInt(100) < newCactusChance;
+            plantNewCactus = random.percentChance(newChance);
         }
     }
 

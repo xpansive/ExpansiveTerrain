@@ -1,45 +1,48 @@
 package com.xpansive.bukkit.expansiveterrain.populator;
 
-import java.util.Random;
-
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.generator.BlockPopulator;
+import org.bukkit.configuration.file.FileConfiguration;
 
-public class WildGrassPopulator extends BlockPopulator {
+import com.xpansive.bukkit.expansiveterrain.WorldState;
+import com.xpansive.bukkit.expansiveterrain.util.DirectWorld;
+import com.xpansive.bukkit.expansiveterrain.util.RandomExt;
 
-    private int minSteps, maxSteps, chance;
+public class WildGrassPopulator extends ExpansiveTerrainPopulator {
 
-    public WildGrassPopulator(int minSteps, int maxSteps, int chance) {
-        this.minSteps = minSteps;
-        this.maxSteps = maxSteps;
-        this.chance = chance;
+    private int minSteps, maxSteps;
+    private double chance;
+
+    public WildGrassPopulator(WorldState state, String path) {
+        super(state);
+        FileConfiguration config = state.getConfig();
+        minSteps = config.getInt(path + "minsteps");
+        maxSteps = config.getInt(path + "maxsteps");
+        chance = config.getDouble(path + "chance");
     }
 
     @Override
-    public void populate(World world, Random random, Chunk source) {
-        if (random.nextInt(100) > chance)
+    public void populate(int chunkX, int chunkZ) {
+        RandomExt rand = state.getRandomExt();
+        DirectWorld world = state.getDirectWorld();
+        
+        if (!rand.percentChance(chance)) {
             return;
-
-        int x = (source.getX() << 4);
-        int z = (source.getZ() << 4);
-        int y = world.getHighestBlockYAt(x, z);
+        }
+        
+        int x = chunkX + rand.randInt(16);
+        int z = chunkZ + rand.randInt(16);
 
         // Determine the size/steps
-        int numSteps = random.nextInt(maxSteps - minSteps + 1) + minSteps;
+        int numSteps = rand.randInt(minSteps, maxSteps);
 
         // Random walking
         for (int i = 0; i < numSteps; i++) {
-            x += random.nextInt(3) - 1;
-            z += random.nextInt(3) - 1;
-            y = world.getHighestBlockYAt(x, z);
-            Block b = world.getBlockAt(x, y, z);
+            x += rand.randInt(-1, 1);
+            z += rand.randInt(-1, 1);
+            int y = world.getHighestBlockY(x, z);
 
-            if (b.getRelative(0, -1, 0).getType() == Material.GRASS && b.getTypeId() == 0) {
-                b.setType(Material.LONG_GRASS);
-                b.setData((byte) 1); // The default wild grass type
+            if (world.getMaterial(x, y - 1, z) == Material.GRASS && world.getTypeId(x, y, z) == 0) {
+                world.setRawTypeIdAndData(x, y, z, Material.LONG_GRASS.getId(), 1);
             }
         }
     }

@@ -1,26 +1,25 @@
 package com.xpansive.bukkit.expansiveterrain.biome;
 
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.file.FileConfiguration;
+
+import com.xpansive.bukkit.expansiveterrain.WorldState;
 
 public class BiomeGeneratorFactory {
-    private BiomeGenerator RAINFOREST;
-    private BiomeGenerator DESERT;
+    private final BiomeGenerator rainforest;
+    private final BiomeGenerator desert;
 
-    public BiomeGeneratorFactory(FileConfiguration config) {
-        DESERT = new DesertBiomeGenerator(config);
-        RAINFOREST = new RainforestBiomeGenerator(config);
+    public BiomeGeneratorFactory(WorldState state) {
+        desert = new DesertBiomeGenerator(state);
+        rainforest = new RainforestBiomeGenerator(state);
     }
 
     public BiomeGenerator getForBiome(Biome biome) {
-        switch (biome) { // This only looks strange while it's in beta :)
-        case FOREST: // Since 1.8, there are no longer rainforest biomes. Use forest instead.
-            return RAINFOREST;
+        switch(biome) {
         case DESERT:
-        case OCEAN: // Hate the giant oceans? Now they're giant deserts!
-            return DESERT;
+        case DESERT_HILLS:
+            return desert;
         default:
-            return RAINFOREST; // TODO: Set generator for unhandled biomes
+            return rainforest;
         }
     }
 }

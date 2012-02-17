@@ -1,9 +1,13 @@
 package com.xpansive.bukkit.expansiveterrain.structure;
 
-import java.util.Random;
+import com.xpansive.bukkit.expansiveterrain.GeneratorBase;
+import com.xpansive.bukkit.expansiveterrain.WorldState;
 
-import org.bukkit.World;
+public abstract class StructureGenerator extends GeneratorBase {
+    
+    public StructureGenerator(WorldState state) {
+        super(state);
+    }
 
-public abstract class StructureGenerator {
-    public abstract boolean generate(World world, Random rand, int x, int y, int z);
+    public abstract boolean generate(int x, int y, int z);
 }
